@@ -1,0 +1,32 @@
+<body>
+This Java code generating package is designed for both static and dynamic 
+(especially interactive) clients.  The package structure is very simple: each
+subclass of the abstract GConstruct represents one or more Java code constructs
+by containing the corresponding representative class(es) from its compiler foundation.
+These classes fit together into a tree in direct parallel with the format of
+the language itself, much the same way a compiler builds its tree of code constructs
+during parsing operations.  A .java source file is represented by the outermost
+class GSourceFile; see its documentation and follow its members into the depths of 
+the Java language.
+<P>
+Compilation and .java source file printing are currently backed by the Kopi 
+compiler KJC.  Because this is a GPL licensed project, org.hs.generator must
+for the time being also fall under the GPL.  In the future I plan to move it to
+another compiler with a more lenient license.  The process should be simple
+and straightforward, so if you are interested in doing the same, please contact
+me for permission at <a href=mailto:bitwise@cablespeed.com>bitwise@cablespeed.com</a>.
+<P>
+The data members of almost all the classes in this package have been made public,
+so as to provide a broad base of access upon which the widest variety of client
+structure can be built.  Also, this makes for especially concise and readable
+code-generating-code in the case of a static client.  However, there is 
+considerable risk involved: if you need notification of access to your generator
+foundation, you will have to wrap each GConstruct and provide accessors (or 
+subclass them as such and require a policy of non-use for the public members).
+<P>
+For extremely dynamic environments, the class GConstruct provides a set of 
+generic reflection accessors, <code>set(String fieldname, Object value)</code>
+and <code>get(String fieldname, Object value)</code>.  It is easy to trap calls
+to these methods in a subclass, but no listener hook is at present provided to 
+directly monitor activity through this mechanism.  
+</body>

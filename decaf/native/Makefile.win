@@ -1,0 +1,30 @@
+# Project: Plugin
+# Makefile created by Dev-C++ 4.9.7.4
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = plugin.o $(RES)
+LINKOBJ  = plugin.o $(RES)
+LIBS =  -L"C:/DEV/C++/DEV-CPP/lib" "C:/dev/java/jdk/lib/jvm.lib" 
+INCS =  -I"C:/DEV/C++/DEV-CPP/include"  -I"./"  -I"C:/dev/java/jdk/include"  -I"C:/dev/java/jdk/include/win32"  -I"C:/dev/decaf_demo/decaf/native"  -I"."  -I"C:/dev/java/jdk/include"  -I"C:/dev/java/jdk/include/win32" 
+CXXINCS =  -I"C:/DEV/C++/DEV-CPP/include"  -I"C:/dev/c++/Dev-Cpp/include/c++"  -I"C:/dev/c++/Dev-Cpp/include/c++/mingw32"  -I"C:/dev/java/jdk/include"  -I"C:/dev/java/jdk/include/win32"  -I"C:/dev/decaf_demo/decaf/native"  -I"."  -I"."  -I"C:/dev/java/jdk/include"  -I"C:/dev/java/jdk/include/win32" 
+BIN  = Plugin.a
+CXXFLAGS = $(CXXINCS) 
+CFLAGS = $(INCS) 
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before Plugin.a all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+$(BIN): $(LINKOBJ)
+	ar r $(BIN) $(LINKOBJ)
+	ranlib $(BIN)
+
+plugin.o: plugin.cpp
+	$(CPP) -c plugin.cpp -o plugin.o $(CXXFLAGS)

@@ -1,0 +1,10 @@
+body { background: rgb(149,181,219); color:rgb(30,55,87); font: 10pt/12pt Times }
+caption { color: black; font: 12pt/14pt Times }
+th { color: black; font: 12pt/14pt Times bold }
+td { color: black; font: 12pt/14pt Times }
+h1 { color: black; font: 18pt/22pt Times }
+dt { color: color:rgb(30,55,87); font: 10pt/12pt Times }
+a:link { font: 10pt/12pt Times; color:rgb(10,55,35) }
+a:visited { font: 10pt/12pt Times; color:rgb(10,55,30) }
+a:active { font: 10pt/12pt Times; color:rgb(10,55,30) }
+dfn { font: 10pt/12pt Times italic; color:rgb(10,55,30)  }

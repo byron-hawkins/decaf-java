@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../umail/account.h</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>/*
+ * Copyright (C) 2003 HawkinsSoftware
+ *
+ * This prototype of the Decaf Java development environment is free 
+ * software.  You can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software 
+ * Foundation.  However, no compilation of this code or a derivative
+ * of it may be used with or integrated into any commercial application,
+ * except by the written permisson of HawkinsSoftware.  Future versions 
+ * of this product will be sold commercially under a different license.  
+ * HawkinsSoftware retains all rights to this product, including its
+ * concepts, design and implementation.
+ *
+ * This prototype is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */</font>
+<font color=#9A1900>// &lt;[a name="start"/]&gt;
+</font>
+<font color=#9A1900>// account.h
+</font>
+<font color=#9A1900>/*
+This file contains all the umail data structures, and their facilities for 
+reading from and writing to the offline storage file uMail.dat (which are all
+bunched together, out of class context, at the end of the file).  
+*/</font>
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;iostream&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;fstream&gt;</font> 
+
+<font color=#0000FF>#ifndef</font> __account_h__
+<font color=#0000FF>#define</font> __account_h__
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;forward.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;template.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;plugin.h&gt;</font>
+
+<font color=#0000FF>using</font> <font color=#0000FF>namespace</font> ::std;
+
+<font color=#9A1900>// &lt;[a name="MailFile"/]&gt;
+</font><font color=#9A1900>/*
+Represents the offline storage file uMail.dat, which is loaded on system startup
+and printed on (normal) system exit.
+*/</font>
+<font color=#0000FF>class</font> MailFile 
+{
+<font color=#0000FF>private</font>:
+    string filename;
+    string buffer;
+    ifstream* in;
+    ofstream* out;
+    <font color=#009900>int</font> indentation;
+    
+    <font color=#009900>void</font> scan();
+    <font color=#009900>void</font> writeIndent();
+<font color=#0000FF>public</font>:
+    MailFile(string f);
+    ~MailFile();
+    <font color=#009900>void</font> line(string c);
+    <font color=#009900>void</font> line(<font color=#009900>int</font> i);
+    <font color=#009900>void</font> line(tm* l);
+    <font color=#009900>void</font> indent();
+    <font color=#009900>void</font> outdent();
+    
+    string consume();
+    <font color=#009900>int</font> consumeInt();
+    tm* consumeTime();
+    <font color=#009900>void</font> consumeIndent();
+    <font color=#009900>void</font> consumeOutdent();
+    string consumeBlock();
+    
+    <font color=#009900>bool</font> beginRead();
+    <font color=#009900>void</font> endRead();
+    <font color=#009900>bool</font> beginWrite();
+    <font color=#009900>void</font> endWrite();
+    
+    <font color=#009900>bool</font> isOutdent();
+};
+
+<font color=#9A1900>// &lt;[a name="Addressee"/]&gt;
+</font><font color=#9A1900>/*
+A uMail user.
+*/</font>
+<font color=#0000FF>class</font> Addressee
+{
+<font color=#0000FF>private</font>:
+    string address;
+<font color=#0000FF>public</font>:
+    Addressee(string a) : address(a) {};
+    Addressee(MailFile* mailFile);
+    string getAddress();
+    
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+};
+
+<font color=#9A1900>// &lt;[a name="Message"/]&gt;
+</font><font color=#9A1900>/*
+An email message.
+*/</font>
+<font color=#0000FF>class</font> Message
+{
+<font color=#0000FF>private</font>:
+    tm* sentTime;
+    Addressee* from;
+    Addressee* to;
+    string subject;
+    string body;
+<font color=#0000FF>public</font>:
+    Message(Addressee* f);
+    Message(MailFile* mailFile);
+    
+    tm* getSentTime();
+    Addressee* getFrom();
+    Addressee* getTo();
+    string getSubject();
+    string getBody();
+
+    <font color=#009900>void</font> setSentTime(tm* t);
+    <font color=#009900>void</font> setFrom(Addressee* f);
+    <font color=#009900>void</font> setTo(Addressee* t);
+    <font color=#009900>void</font> setSubject(string s);
+    <font color=#009900>void</font> setBody(string b);
+    
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+};
+
+<font color=#9A1900>// &lt;[a name="Folder"/]&gt;
+</font><font color=#9A1900>/*
+A mail folder.  This class has been used as an example of the steps required to
+autonomously export a core class to the &lt;[a href="jMail.html#function_pointer"]&gt;dynamic library&lt;[/a]&gt;, such that the library
+does not have to link with the object code of this class.  The essential factor
+is that its methods are catalogued by pointer reference in a vector of 
+&lt;[a href="plugin.html#Method"]&gt;Method&lt;[/a]&gt; and handed to the dynamic library, 
+which uses the methods to 
+call into the executable code base (i.e., the object code generated from this 
+file).  It's cumbersome and hard to read, so for prototype purposes I've 
+remained conventional, and included this as an example.
+*/</font>
+<font color=#0000FF>class</font> Folder <font color=#9A1900>// : public Root
+</font>{
+<font color=#0000FF>private</font>:
+    string name;
+    Messages* messages;
+    Folder* parent;
+    Folders* subFolders;
+<font color=#0000FF>public</font>:
+    Folder(string n);
+    Folder(string n, Folder* p) : name(n), parent(p) { };
+    Folder(MailFile* mailFile);
+    
+    string getName();
+    Messages* getMessages();
+    Folder* getParent();
+    Folders* getSubFolders();
+    Folder* getSubFolder(string name, <font color=#009900>bool</font> createIfMissing);
+    <font color=#009900>void</font> add(Message* message);
+    <font color=#009900>void</font> add(Folder* folder);
+    <font color=#009900>void</font> remove(<font color=#009900>int</font> index);
+    <font color=#009900>int</font> getSize();
+    
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+    
+    <font color=#0000FF>static</font> Folder* create(string n);
+    
+    <font color=#9A1900>// Function pointer example:
+</font>    <font color=#9A1900>// static void exportMethods(Methods* methods);
+</font>};
+
+<font color=#9A1900>// &lt;[a name="PluginAssignment"/]&gt;
+</font><font color=#9A1900>/*
+An assignment of a plugin to a specific class of activity for a particular 
+account.  
+*/</font>
+<font color=#0000FF>class</font> PluginAssignment 
+{
+<font color=#0000FF>private</font>:
+    string activityName;
+    string pluginName;
+<font color=#0000FF>public</font>:
+    PluginAssignment(string a, string p) : activityName(a), pluginName(p) {};
+    PluginAssignment(MailFile* mailFile);
+    string getAssignment();
+    <font color=#009900>void</font> assign(string plugin);
+    <font color=#009900>bool</font> isFor(string activity);
+
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+};
+
+<font color=#9A1900>// &lt;[a name="PluginAssignments"/]&gt;
+</font><font color=#9A1900>/*
+The set of plugin assignments for a particular account.  The parameter (activity)
+represents the name of a class of &lt;[a href="uMail.html#Activity"]&gt;Activity&lt;[/a]&gt;.  
+Note that the 
+method getAssignment(string) returns the defaultAssignment when there is no 
+corresponding assignment; however, the method hasAssignment(string) returns 
+false in the same case.  
+*/</font>
+<font color=#0000FF>class</font> PluginAssignments : <font color=#0000FF>public</font> uVector&lt;PluginAssignment&gt;
+{
+<font color=#0000FF>public</font>:
+    PluginAssignments() : uVector&lt;PluginAssignment&gt;() {};
+    PluginAssignments(MailFile* mailFile);
+    <font color=#009900>void</font> assign(string activity, string plugin);
+    <font color=#009900>void</font> unassign(string activity);
+    PluginAssignment* getAssignment(string activity);
+    <font color=#009900>bool</font> hasAssignment(string activity);
+    
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+    
+    <font color=#0000FF>static</font> PluginAssignment* defaultAssignment;
+};
+
+<font color=#9A1900>// &lt;[a name="Account"/]&gt;
+</font><font color=#9A1900>/*
+A user account, complete with the user, his or her root folder, and the plugin
+assignments he or she has chosen.
+*/</font>
+<font color=#0000FF>class</font> Account 
+{
+<font color=#0000FF>private</font>:
+    Folder* root;
+    Addressee* user;
+    PluginAssignments* pluginAssignments;
+    
+<font color=#0000FF>public</font>:
+    JNIEnv *env;
+
+    Account(JNIEnv* e, Addressee* u);
+    Account(MailFile* mailFile);
+    Folder* getRoot();
+    Addressee* getUser();
+    
+    <font color=#009900>void</font> assignPlugin(Activity* a, string n);
+    <font color=#009900>bool</font> hasPlugin(Activity* a);
+    <font color=#009900>void</font> removePlugin(Activity* a);
+    PluginAssignment* getPlugin(Activity* a);
+    
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+};
+
+<font color=#9A1900>// &lt;[a name="Accounts"/]&gt;
+</font><font color=#9A1900>/*
+All the accounts in the system live here.  
+*/</font>
+<font color=#0000FF>class</font> Accounts : <font color=#0000FF>public</font> uVector&lt;Account&gt; 
+{
+<font color=#0000FF>public</font>:
+    Accounts(MailFile* mailFile);
+    
+    <font color=#009900>bool</font> has(string addressee);
+    Account* get(string addressee);
+    
+    <font color=#009900>void</font> read(MailFile* mailFile);
+    <font color=#009900>void</font> write(MailFile* mailFile);
+};
+
+<font color=#0000FF>#endif</font>
+</tt>
+</pre>
+</body>
+</html>

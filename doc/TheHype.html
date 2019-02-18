@@ -1,0 +1,307 @@
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>The Advantages of Decaf Java</h2>
+Decaf creates an optimal development environment for the non-programmer by providing all the features
+of the <a href="#Java">Java Language</a>, while requiring almost no programming experience on the part of the 
+user.  Decaf accomplishes this by pre-tokenizing the source code with input components, thereby 
+eliminating parsing and its host of errors; and by providing easily understood documentation, <a href="DecafCustomizationGuide.html">
+customizable</a> by the application developer, at each and every point of the development process.  Consider
+the alternative: non-programmers typically choose a variety of <a href="Glossary.html#4GL">4GL</a> to write
+programs.  These languages simplify the programming effort by removing or consolidating language features so
+that the user doesn't have to think about too many things at the outset.  But programming is a learning process
+by its very nature, so this simplicity only benefits the user for a short while.  Soon the absence of the
+features of a <a href="Glossary.html#3GL">3GL</a> make the scripting language a <a href="#Scripting">burden</a>.  Decaf provides the 
+best of both worlds by making pure Java easy for beginners.  There are of course some drawbacks to Decaf, as 
+listed <a href="#WhyNot">below</a>.
+
+<h3>How Decaf Works</h3>
+The Decaf editor is unique among programming tools in that it has no text editor in which the
+user types their code.  Instead, Decaf provides a visual component for each <a href="Glossary.html#token">
+token</a> of the source code, along with facilities for creating, moving, copying and linking tokens.  Decaf has 
+been integrated with a Java compiler (currently 
+<a href="Glossary.html#KJC"> KJC</a>, which has passed <a href="Glossary.html#Jacks">Jacks</a>), and provides a 
+convenient visual mechanism for the user to create each and every Java construct that KJC is capable of compiling 
+into <a href="Glossary.html#bytecode"> bytecode</a>. The benefit of this approach
+is that the Decaf editor is aware of the user's activity, and is prepared to help the user 
+each step of the way.  Furthermore, Decaf prevents the user from making certain categories of 
+mistakes that are common in the traditional text-based development environments.  
+<dir>
+<li><a href="Glossary.html#parse"> Parse</a> errors
+are impossible in Decaf, because the code is assembled from a set of predefined tokens, and from user-defined
+tokens whose identifier (name) is only typed once, at the point of declaration (therefore there 
+is no parsing).  
+<li>Decaf does not allow variables to be referenced out of scope, and in many cases
+prevents the user from making typed associations between tokens of incompatible type.  
+<li>Compile that can be detected by Decaf in realtime, but cannot be prevented, are marked by the editor in blue, 
+and placed in the <a href="DecafUserGuide.html#BluesReview">Blues Review</a> for the user to 
+review at their leisure.  
+<li>Compile errors that are not detectable in realtime are identified
+during compilation in the manner of a traditional source code compiler.  Note that in the initial release 
+of Decaf, these latter errors will be presented to the user in context, accompanied by 
+a complete explanation and list of options for correction. 
+</dir>
+<p>
+Let me delineate this advantage in further detail.  When a traditional compiler finds an 
+error in a source file, it usually cannot explain to the user specifically what is wrong, because
+there are so many possibilites.  Yet the compiler does not give its user this list of possiblities,
+so the user is then required to go through a memorized list of items to consider, and hope that
+the problem at hand comes to mind.  This can be a frustrating ordeal, even for experienced developers,
+and is completely beyond the grasp of the novice.  Someone who is new to the 
+programming language will have to spend hours learning the various ways of tracing a compiler's 
+error output to the actual error in their source file.  Such a user will only be immediately productive
+amidst the depth and complexity of a <a href="Glossary.html#3GL">3GL</a> if the programming
+environment provides adequate information at each stage of the development process.  This of course
+poses a significant challenge to the programming environment, which I believe can be accomplished
+through compliance with a principle I call <a href="Glossary.html#MinimalDrift">minimal drift</a>.
+Should a Decaf developer outgrow these hand-holding features, he or she may move on at any time to 
+a traditional Java development environment; Decaf prints nicely formatted Java source code as part
+of its compilation process, so that no programming efforts will be lost or convoluded in transition.
+
+<p>
+<a name="Java"/><h3>The Java language</h3>
+The Java language offers numerous benefits of its own.
+<dir>
+<li>Java is a fully structured, object-oriented, strongly-typed language that has proven reliable for
+applications ranging from tiny web applets to massive business systems.  
+<li>The <a href="http://java.sun.com/docs/books/jls/second_edition/html/jTOC.doc.html">Java Language Specification</a> 
+details every last iota of the Java language constructs, both implicit and explicit, such that the 
+programmer need never postulate the result of executing any statement or expression in their code.  
+<li>Hailed as the ultimate in structural integrity, Java provides a rich set of language constructs
+that allow a program to be accurately modeled to the target problem space, while at the same 
+time establishing a concise externalization of each object for foolproof class cohesion (even
+between classes that were developed with no awareness of each other's existence; see the 
+<a href="jdk/api/java/lang/reflect/package-summary.html">reflection</a> package for details).
+<li>Java is platform independent, so that a program written on one operating system will run 
+exactly the same way on another.
+<li>The list goes on... please visit Sun Microsystem's <a href="http://java.sun.com">JavaSoft</a>
+website for more information.
+</dir>
+<p>
+<a name="Scripting"/><h3>Disadvantages of Scripting Languages</h3>
+Simple scripting languages are often considered for use in plugin development, because they are easy for the
+novice to learn.  But this advantage can deteriorate quickly.  Such languages typically perform numerous 
+implicit operations that are not revealed to the user; automatic data type conversion, for example.  This 
+allows the user to get started on their project without thinking about certain technical details, but it's not long before the user is 
+running tests on the language itself, trying to figure out what it does in those cases where the script behavior is 
+not explicitly specified in its syntax.  Scripting languages typically provide a bare minimum of structure, again
+allowing the user to get started without having to think about language formalities.  But
+it is very common for script authors to require substantial structure, even those who consider themselves
+to be novices in the art.  Because the language does not understand such structure, the author must first
+invent a policy by which the structure can be made manifest, and then must maintain that policy through
+comments and meticulous evaluation of the code at every step of script development.  
+Not only is this very difficult and time-consuming, but these home-grown structures cannot
+be externalized (i.e., related to the main application, or to another script), becauase the language is totally
+unaware that the structure exists.  Therefore, instead of shielding the user from the efforts associated with  
+structured programming, the simplified scripting language instead imposes the <i>entire</i> responsibility of 
+script structure upon its authors.
+<p>
+<h3>The Java platform</h3>
+It naturally follows that Decaf also provides the plugin developer with access to the entire
+<a href="http://developer.java.sun.com/developer/onlineTraining/new2java/overview.html">
+Java platform</a> and its accompanying API.  Known as the <a href="Glossary.html#JavaAPI">
+Java API</a>, it contains a vast complement of facilities:
+<p>
+<dir>
+<li><a href="jdk/api/java/util/package-summary.html">sets and lists, dates and times</a>
+<li><a href="jdk/api/java/io/package-summary.html">files and data streams</a>
+<li><a href="jdk/api/java/net/package-summary.html">network activity</a>
+<li><a href="jdk/api/java/sql/package-summary.html">SQL database access</a>
+<li><a href="jdk/api/java/text/package-summary.html">text formatting</a>
+<li><a href="jdk/api/javax/swing/package-summary.html">user interface components</a>
+<li><a href="jdk/api/java/awt/package-summary.html">graphics, etc.</a>
+<li>not to mention <a href="jdk/api/java/lang/package-summary.html">the basics</a>
+</dir>
+<p><a name="Locale"/><b>Plugin Sharing</b><br>
+All these features are meticulously designed for linguistic, locale and cultural independence.
+Users from any place in the world will find tools to suit their environment and expectations.
+With a bit of special attention, a Java program's locale-specific behavior will be transparently 
+adjusted to the user's locale settings, such that a plugin written in France will look to a 
+Japanese user like any other plugin written by Japanese users.
+<p>
+<a name="MinimalDrift"/><h3>Minimal Drift</h3>
+Decaf seeks to position itself in the comfort zone of the non-programmer, which requires some analysis of what 
+comprises such comfort.  In my experience, the essential obstacle for a user in trying something new is the moment 
+they are faced with a question that they don't know how to ask, even of themselves.  This typically happens for 
+one of two reasons:<p>
+<dir>
+<li>A reference to some entity or concept arises for the first time, or
+<li>The application offers so little information about an entity or concept that it's difficult even to recognize it as such.
+</dir><p>
+In either situation, the user must drift around in a sea of documentation looking for a relevant question that 
+it contains.  It takes a long time to find answers this way, because one simply must stumble upon 
+the parts of the question that are missing, one by one, until the entire question can be accurately stated.  Good 
+documentation is suitable for accurate questions, and at that point the user is back on task.<p>
+<b>Itemization of Minimal Drift</b><br>
+Programming in a new language makes for an endless stream of this experience.  And I have always found that, once 
+a novice programmer learns to confidently recognize and correlate the concepts at issue, he or she is suddenly free of the 
+tentative inhibition that made the new programming language cumbersome and difficult.  If my assessment is correct, then the task at 
+hand is to maintain an environment in which the user can identify and understand all the visible components and their associations,
+without having to omit any useful language or library constructs.
+<dir>
+<li>Attach verbose <a href="DecafCustomizationGuide.html#TypeChooser">descriptions</a> to everything the user can see 
+(usually one click away, to avoid clutter), being especially careful with the things they need to make use of or respond to.
+<li>Decide how many logical steps a group of users is likely to correlate comfortably, within their imaginations, 
+and never display a component on screen that is of any less granularity.  
+<li>Assume the users cannot make correlations of any greater depth in their minds, and provide visual operations 
+with which to make those correlations on the screen.  Assume also that if you leave out a visual operation for a 
+particular kind of association, the user will be entirely unable to conceive of that association.  It's the phenomenon
+of <i>monkey see, monkey do</i> in reverse: <i>monkey do, monkey see</i>.  
+<li>Whenever possible, prevent the user from making correlations that have no value, especially when they cause errors.
+<li>Don't speak disparagingly to the user about anything, even if it could possibly be obvious to a monkey.  Politeness 
+is not at issue: a disparaging statement implies an expectation without stating it, which leads those users who are not 
+"up to par" into asking a question they don't know how to ask. "I must be missing something here, but what is it?"
+<li>Show all correlations of visible components with highlights, or arrows, maybe a little happy face that bounces 
+between related components... whatever it takes.  
+</dir>
+<p>
+<b>Examples of prototype compliance</b><br>
+Please explore the prototype through its demo application <a href="uMailUserGuide.html">uMail</a> to see how these items have been implemented in it; here
+are a few examples, respective to the items above.  
+<dir>
+<li>Classes represented in the <a href="DecafUserGuide.html#TypeChooser">Type Chooser</a> are verbosely 
+documented in terms easily understood by uMail users (for whom the documentation has been 
+<a href="DecafCustomizationGuide.html#TypeChooser">specifically prepared</a>).  
+<li>Because I believe that most people who are willing to write plugins can quickly learn the basic meaning of all the 
+Java keywords, I have organized the Decaf editor 
+with that much granularity, mapping visual components to Java constructs on a one-to-one basis.  Aggregations may be
+<a href="DecafCustomizationGuide.html#Return">created</a> by the application developer where it is deemed appropriate.
+<li>The <a href="DecafUserGuide.html#HotPick">Hot Component</a> UI mechanism (when properly applied) allows the user to 
+create associations between any of these componentized language constructs.  It even helps the user 
+<a href="DecafTutorial.html#Exploring">explore</a> the possible associations.
+<li>Many syntax errors are prevented in Decaf by the configuration of its HotComponents, which do not allow the user to 
+make obvious errors like type incompatibilites and out-of-scope variable references.  
+<li>The <a href="DecafUserGuide.html#BluesReview">Blues Review</a> shows the user
+that code errors are neither dangerous nor unusual by speaking to the user about their errors in a casual, somewhat
+amusing tone.  
+<li>When an expression or statement editor window has focus, each visible reference to its content is highlighted with a 
+blue box, to help the user recognize the flow of the method being edited.  
+</dir>
+<p>
+<b>Examples of prototype non-compliance</b><br>
+Being a prototype, this version of Decaf fails to accomplish <i>minimal drift</i> in many ways.  These will of course be 
+fixed in the initial release, but let me point out some examples so that you can see their degrading effect on 
+the user experience.  A more complete list of prototype inadequacies awaits your attention <a href="#LameList">below</a>.
+<dir>
+<li>Language constructs and <a href="api/com/bitwise/decaf/editor/grammar/EnforcementOfficer.html">syntax enforcing entities</a> 
+are currently not visibly documented, and the latter are themselves invisible.    
+<li>It isn't currently possible to move the components of nested expressions in all the obvious ways.  I hear a user asking,
+"Why can't I put this bit of code in this box?  Is it against the rules, or did the programmer forget something?"  
+<li>If the user opens a new .cup file while a 
+method editor is out on the desktop, it will not be disposed; and worse, there is no convention for visually associating a 
+method editor with the class it belongs to.  "Why isn't this method listed in the methods box?"  
+</dir>
+<p>
+<h3>Plugins</h3>
+The notion of integrating plugins into a commercial application may seem superfluous to some development organizations.
+"If it's this much trouble to make plugin writing accessible to the average user, why not provide application 
+customization with the traditional menus and dialogs?"  The advantage of the plugin model is that it 
+opens an entire dimension of possibilities for the user, while minimizing the development effort required
+to support each of those possibilities.  A menu item or dialog typcially provides the user with a single 
+choice or operation on its data object.  That choice or operation is only in the rarest cases
+attached in a user-controlled way to another choice or operation.  That same menu item or dialog requires
+extensive implementation by the developer, even if it is trivial: it requires a place in the user-interface,
+documentation, and of course integration with the application.  So in this model, a substantial 
+implementation investment yields just one atom of user access, and the user is never able to
+create "molecular" structures.  The plugin model provides the opposite in both regards.  Each data 
+object exposed to the user as a plugin library class can be incorporated into an infinite depth
+and variety of user constructs.  And the developer need make only a single effort to 
+<a href="NativeIntegration.html">export</a> the data
+object to Java.  In his recent publication <a href="http://library.wolfram.com/database/Books/4046/">
+A New Kind of Science</a>, Stephen Wolfram demonstrates
+that software programs made of the simplest parts can, if allowed sufficient depth, exhibit the
+richness and complexity of the most mysterious and intricate natural phenomena of our universe.  In this way, a
+trivial data access layer exposed to plugins provides users with a universe of opportunity with which to apply their 
+creativity in making their software more and more useful.  
+<p>
+<a name="IntrinsicAccessibility"/><h3>Intrinsic Accessibility</h3>
+Plugins are most commonly used in commercial applications as standalone functions: the user stops what they are 
+doing, goes to a plugin menu, and runs a plugin.  The plugin expects the application to be in a certain state when
+it starts, and expects to be the only process in operation until it finishes.  I advocate the integration of plugins
+into the core functionality of the application itself, such that some of its operations are implemented as plugins.
+This will (given today's technology) require more <a href="Glossary.html#JVM">system resources</a>, and it can be 
+more <a href="NativeIntegration.html">laborious</a> to code.  Certainly a reasonable degree of granularity must be
+prepared for these plugins' interaction with the main application code.  But the benefits are tremendous.
+<p>
+<dir>
+<li>The default implementation of these system operations are visible to the user (at whatever granularity is chosen),
+so there need be no guessing as to, "What does this button do?"
+<li>The user may make a tiny adjustment to an operation, add a feature, remove an annoying bit, or rewrite the operation 
+entirely.  In each case, the application developer's task is singular: implement the operation's default behavior as a plugin.
+<li>Users may <a href="#Locale"/>share</a> their modifications to these operations, such that customized versions 
+of commercial software can grow throughout the user base.  This is especially beneficial for those users who have 
+no interest messing with plugins, but are very interested in having their software behave exactly the way they want.
+<li>Application developers can easily provide numerous different versions of their software; e.g., making a simplified 
+version available to very new users, and providing plugin upgrades to the more complete version when such a user is ready.
+<li>And the <i>coup de gras</i>: commercial applications may be chained together through their plugin interfaces, by 
+sharing a common <a href="Glossary.html#JVM">JVM</a>, or by connecting JVMs across a network.
+</dir>
+<p>
+Obviously, the success of this principle depends on the average user's ability to read and work with plugins, and 
+especially to do so within their comfort zone.  This means no tutorials, or "Learn XYZ in 30 days" -- the user must 
+be able to open a plugin and understand what it means without any specific preparation or skill.  Since I do not 
+advocate the cloning of software-inclined personalities, instead I suggest the principle of 
+<a href="Glossary.html#MinimalDrift">minimal drift</a> as a bridge over this gap between programming proficiency 
+and the average user.
+
+
+<p>
+<a name="WhyNot"/><h3>Why Not Decaf?</h3>
+After all that hype, let me relax the tone with a somber delineation of the less desirable features of Decaf.  
+<dir>
+<li>It relies on the <a href="Glossary.html#JVM">JVM</a>, which is a notorious resource pig; it takes 
+lots of memory, lots of processor time, and its <a href="Glossary.html#GarbageCollector">garbage collector</a> 
+is not remarkably efficient in deallocating memory that is no longer needed by Java processes.  Users who 
+run your main application at the very limit of their system's capacity will not be able to run Decaf plugins without 
+a hardware upgrade.  <p>
+<li>Its point-and-click interface may feel claustrophobic to the user.  While it provides access to each and every legal
+Java declaration, statement and expression, the Decaf editor lacks the freedom of a text-based code editor.  Programmers 
+commonly indulge in the haphazard 
+coding of incomplete ideas, temporarily neglecting the bounds of syntax and grammar, as a means of exploring possibilities 
+and establishing a foundation for their implementation.  With this freedom comes the trial of parsing, which I deem to 
+be a substantial challenge for beginners.  Hence it is by the very fettering of such carefree spirit that Decaf makes the 
+<a href="Glossary.html#3GL">3GL</a> features of Java available to the novice programmer.  <p><i>Rebuttal:</i> 
+One could debate at length whether
+such chaotic coding is useful and should be encouraged, given the alternative of scribbling psuedocode with a pencil.  
+If necessary, it 
+will be possible to include a context sensitive text-based code editor with Decaf (though the 
+development effort is ponderous).  
+</dir>
+<p>
+<a name="LameList"/><h3>Lame List</h3>
+As you review the prototype, please bear in mind that it is a work in progress.  Much of the clumsiness
+of the user interface is due to temporary issues that cannot be resolved until certain
+<a href="BusinessProposal.html#WorkRemaining">structural changes</a> are made, or whose resolution will
+be undone by those changes.  Here is a list of Decaf's lament.
+<p>
+<dir>
+<li>The <a href="api/com/bitwise/decaf/editor/grammar/EnforcementOfficer.html">enforcement officers</a> 
+should be more numerous and more strict, and they should have some kind of visible handle in the user interface, 
+so that the user can be proactive about avoiding their violations.  
+<li>The <a href="DecafUserGuide.html#HotPick">Hot Component</a> associations available to the user must be filled 
+out, so that the interface is more fluid.
+<li>Expressions placed in the <a href="DecafUserGuide.html#BluesReview">Blues Review</a> are never removed, even
+after the expression has been corrected or sent to the <a href="DecafUserGuide.html#Percolator">percolator</a>.
+<li>When a code construct is being edited, references to that construct around the UI are highlighted with a 
+blue border -- but not consistently.  
+<li>The enforcement officers' static index for internal ID numbers is being reset to zero when a .cup file is opened,
+regardless of how many officers are present in the cup.  This is just a lame bug -- can you identify its consequences?
+<li>The user interface lacks many visual associations, and dumps stack traces frequently.  Bugs bugs bugs!
+</dir>
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+</body>

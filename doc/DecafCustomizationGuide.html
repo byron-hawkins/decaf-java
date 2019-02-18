@@ -1,0 +1,205 @@
+
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>Decaf Customization Guide</h2>
+
+As mentioned throughout the documentation for this prototype, the Decaf editor can be 
+customized in almost every way perceivable by the user.  The goal is to allow the application 
+developer to control how the Java language appears.  This includes the following
+<a href="DecafUserGuide.html#TypeChooser">Type Chooser</a> entities:
+<dir>
+<li>The types (i.e., Java classes) available in the type tree, and the names by which they are known
+<li>The methods and fields available on those types
+<li>Names of method parameters
+<li>Descriptive instructions on the usage of each type, method, field and parameter
+</dir>
+
+Some users will require a great deal of very specific documentation, while others will just need a brief
+mention of the purpose and functionality of each class and method.  <p>
+The language constructs
+themselves can also be tailored to the user base.  In some cases it is useful and feasible
+to provide facilities for the complete Java language, including such technical features like
+inner classes, interfaces and exception handling.  In other cases, a bare minimum of 
+language constructs will suffice, and may even benefit the users if they are notably
+unadventuresome.  The application developer chooses the visual component that represents
+each language token and each editor role; these may be custom built as long as they implement
+the appropriate interface and adhere to editor policy.  Typically the spectrum ranges from cumbersome 
+but plainly obvious components on one end, to free flowing components that require a substantial 
+grasp of software on the other.  Components for all of the language constructs can be plugged 
+into the editor using the conifguration file decaf_config/umail/config.xml, the format for 
+which is provided by <a href="config.dtd">config.dtd</a>.<p>
+
+<table border="2">
+<tr>
+	<td><b><center><a href="config.dtd">config.dtd</a> element</td>
+	<td><b><center>Configures</td>
+</tr>
+<tr>
+	<td>&lt;Grammars&gt;</td>
+	<td><a href="DecafUserGuide.html#GrammarMenu">grammar menu</a></td>
+</tr>
+<tr>
+	<td>&lt;ClassComponents&gt;</td>
+	<td>Class Editor</td>
+</tr>
+<tr>
+	<td>&lt;MethodComponents&gt;</td>
+	<td>Method Editor</td>
+</tr>
+<tr>
+	<td>&lt;FieldComponents&gt;</td>
+	<td>Field Editor</td>
+</tr>
+<tr>
+	<td>&lt;ParameterComponents&gt;</td>
+	<td>Parameter Editor</td>
+</tr>
+<tr>
+	<td>&lt;LocalComponents&gt;</td>
+	<td>Local Variable Editor</td>
+</tr>
+</table>
+
+<p>
+<a name="TypeChooser"/><h3>Type Chooser configuration</h3>
+The contents of the type chooser are entirely determined by the aforementioned configuration file; they are 
+drawn from the &lt;TypeDefinition&gt; and &lt;TypeChooserContent&gt; elements.  A type is
+defined in the world of Decaf with a &lt;TypeDefinition&gt; element, which specifies its
+classname by attribute.  By default, all of the declared methods of the class are available
+for use in Decaf, but none of the superclass methods.  Use the attributes <b>declaredMethods</b>
+and <b>superMethods</b> to change this behavior, using the value <b>DETAILED</b> to specify that only 
+methods mentioned in the &lt;TypeDefinition&gt; element for that category should be available
+in Decaf, or using the value <b>ALL</b> to specify that all methods should be made 
+available whether they are mentioned in the &lt;TypeDefinition&gt; or not.  A method is mentioned
+in detail with the &lt;Method&gt; element, which specifies its name by attribute and its parameters
+with the sub-elements &lt;Parameter&gt;.  The term <i>detail</i> refers to the documentation that 
+is attached to the nodes of the Type Chooser's type tree; that information is drawn from 
+&lt;Discussion&gt; elements, which can optionally be applied to &lt;TypeDefinition&gt; and 
+&lt;Method&gt; elements.  To detail a parameter or a field, simply include the documentation as the body
+of the &lt;Parameter&gt; or &lt;Field&gt; element (respectively).
+<p>
+<h3>Type Chooser example</h3>
+<dir>
+<li>Open the file decaf_config/umail/config.xml in your favorite text editor and find the definition of 
+the type List: <p>
+&lt;TypeDefinition Classname="java.util.Vector" uid="List"&gt;<p>
+Observe that it uses the default attribute 
+for <b>superMethods</b>, which is <b>DETAILED</b>, meaning that only those
+methods of Vector's superclasses that have been specifically detailed with &lt;Method&gt; 
+elements will be available in for use in Decaf.  The useful method iterator() is therefore
+excluded in this configuration; a Decaf user can't get a ListWalk object with which to walk 
+the elements of (what they see as) a List.
+<li>Add the iterator() method by creating a &lt;Method name="iterator"&gt; element
+inside the &lt;TypeDefinition&gt; of List.  <p>
+<li>Explain this method to the user by adding a &lt;Discussion&gt; element within the new &lt;Method&gt; 
+element, and entering a user-level description in its body.  This description will appear at the bottom of the
+Type Chooser when the node for the iterator() method is selected. <p>
+<li>Open the Decaf editor to see how the method java.util.Vector.iterator() now appears to the user.
+</dir>
+<p>
+<a name="Return"><h3>Creating a Grammar</h3>
+You may have noticed that, while the Decaf Method Editor has a return type field, there is no
+means for creating a return statement.  For a technical discussion of the mechanism for creating
+such a grammar, see the documentation for <a href="api/com/bitwise/decaf/editor/grammar/GrammarMask.html">GrammarMask</a>.
+While you're here, let's try implementing this keyword by creating a new
+subclass of GrammarMask named Return.  The easiest way is to copy the file 
+decaf_demo/decaf/com/bitwise/decaf/editor/grammar/While.java to Return.java in that 
+directory, and modify it (currently a do/while loop) to behave as a return statement.  If you just
+want to see what the results look like, pay a visit to decaf_demo/example/Return.java
+(perform the last step of these instructions to try it out).
+<p>
+<dir>
+<li>Replace all instances of the whole word "While" with the word "Return".
+<li>Remove the <code>PhraseBox "condition"</code> on lines 53-55 
+<li>Change the <code>ParagraphBox "Do"</code> to a <code>PhraseBox "Return"</code> on line 56. 
+<li>Rename the <code>static class ConditionOfficer</code> to <code>ValueOfficer</code>, becauase it
+will now be monitoring the return value.
+<li>Determine whether the current return value is in violation by checking it against the method's
+return type with the following condition:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>data.getEnclosingMethod().getReturnType().isAssignableFrom(data.getType())</code><p> 
+<li>If the return value is found to be in violation, we'll have to tell the user about it in the 
+<code>super.violation()</code> statement.  Enter an appropriate violation message, using <code>Type.getDisplayName()</code>
+to refer to the names of types.
+<li>Modify the static class NewAction to present itself as a return statement; this class will be 
+placed into the <a href="DecafUserGuide.html#GrammarMenu">grammar menu</a> when Decaf starts up. 
+<li> Modify the static class Data to extend <a href="api/org/hs/generator/GReturn.html">GReturn</a> 
+<li>Remove the <code>Paragraph body</code> member, and change the <code>protected ConditionOfficer</code> to
+our <code>ValueOfficer</code>.
+<li>Remove the middle three lines from the constructor. 
+<fn>Note: The <code>handle</code> passed to the new Phrase in the <i>this</i> statement represents the paragraph 
+(block of statements) in which the user has chosen to place this return statement.  The parameter
+to the <a href="api/com/bitwise/decaf/editor/grammar/Sentence.html">Sentence</a> constructor that 
+we added is its parent, and in this way we have attached the new return statement into the Decaf
+code tree.</fn>
+<li>Our ValueOfficer needs to patrol the return value; instantiate the officer prior to the line <code>handle.setData(this)</code>,
+to be sure that the officer exists before being called.
+<li>Put the officer on duty after the line <code>handle.setData(this)</code>, using the statement:<p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>((Phrase)super.value).patrol(officer);</code><p>
+<li>Return to (original) line 56 for a moment, and change the reference to <code>this.data.body</code>
+to <code>this.data.value</code>, so that the mask displays the return statement value.  
+<li>Using the existing <code>Data.getComponent()</code> method as an example (understanding that
+<code>super.description</code> refers to the description field available on every Decaf grammar),
+modify it to present the <code>Data</code> class as a return statement.  Use <code>Phrase.render()</code> 
+to render the value of the return statement.  
+<li>Modify the <code>Data.setHandle()</code> method to set the handle of the <code>super.value</code> 
+field to the parameter <code>handle</code> (as demonstrated in the example).  This method is called when the 
+user moves this return statement to a different location in the code tree, so we must notify our internal 
+construct of our change of address.  
+<li>Edit the file config.xml and add a &lt;Sentence&gt; entry in the &lt;Grammars&gt; element with the 
+new return grammar com.bitwise.decaf.editor.grammar.Return.  This notifies Decaf to load our return statement 
+into the grammar menu at startup. 
+</dir>
+<p>
+The next time you run Decaf, you will have the opportunity to return values from your methods.  But lookout,
+if a return value is declared in a method, then a return statement is required as the last statement of the 
+method body.  Are your users up to this?  If not, consider the following option.
+<p>
+<h3>Customizing the Method Editor</h3>
+Suppose that your user base is remarkably unwilling to deal with grammatical concerns in their plugins, but
+are happy to use a very restrictive editor.  The implementation of the return statement <a href="#Return">above</a>
+will probably annoy them, because they will frequently forget (as I always do) to return a value at the very
+end of the method body.  Instead, considser replacing the <i>Return Type</i> field in the Method Editor with a 
+<i>Return Value</i> field.  The user will simply put the method's return value (an expression) in this field.  A corresponding
+return statement will be added at the end of the method body, and the type of the return expression will be applied 
+as the return type of the method.  An example implementation can 
+be found at <p>
+&nbsp;&nbsp;&nbsp;&nbsp;decaf_demo/example/ReturnValueBox.java.<p>
+Add this file to the directory decaf_demo/decaf/com/bitwise/decaf/editor/grammar, compile it, and register the
+class with decaf by changing the entry for &lt;EditorConfig&gt;&lt;MethodComponents&gt;&lt;ReturnComponent&gt;
+to use <p>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;classname&gt;com.bitwise.decaf.editor.grammar.ReturnValueBox&lt;/classname&gt;<p>
+Ideally, of course, the
+lowest common denominator of the return value's type will need to be applied as the method return type, but this
+implementation will suffice for a simple demonstration.
+
+<p>
+
+
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+</body>

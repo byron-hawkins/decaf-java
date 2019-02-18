@@ -1,0 +1,17 @@
+org.hs.jfc
+org.hs.generator
+com.bitwise.decaf.editor.grammar
+com/bitwise/decaf/editor/DTextField.java
+com/bitwise/decaf/editor/DTypeBox.java
+com/bitwise/decaf/editor/DecafTextComponent.java
+com/bitwise/decaf/editor/DecafTypeComponent.java
+com/bitwise/decaf/editor/MaskComponent.java
+com/bitwise/decaf/editor/Type.java
+com/bitwise/decaf/editor/Utils.java
+com/bitwise/decaf/editor/PrimitiveType.java
+com/bitwise/decaf/editor/Mask.java
+com/bitwise/decaf/editor/Form.java
+com/bitwise/decaf/editor/Decaf.java
+
+
+

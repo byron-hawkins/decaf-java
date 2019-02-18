@@ -1,0 +1,60 @@
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>Welcome</h2>
+
+The Decaf Java development environment provides self-declared non-programmers with
+access the entire Java programming language, including its vast <a href="Glossary.html#JavaAPI">class library</a>.  
+Decaf's point-and-click user interface assists the user in creating syntatically and functionally correct code, 
+and its visual components map to Java code constructs on a one-to-one basis, so as to avoid cohesion problems.
+The UI is fully <a href="DecafCustomizationGuide.html">customizable</a>, allowing the application developer to 
+assemble a version of Decaf that specifially suits the expected needs and skill level of 
+any particular group of users.  While it can be used as a standalone development environment, Decaf has been 
+organized primarily for the creation of plugins that customize and automate commercial applications.
+It should be a simple and non-intrusive process to <a href="NativeIntegration.html">
+integrate</a> Decaf into any application.  And it should be an experience of creative
+freedom and <a href="Glossary.html#MinimalDrift">unfettered productivity</a> for 
+users to implement their imagination with the Decaf editor.
+<p>
+<h3>What this prototype demonstrates</h3>
+The Decaf editor currently implements most of the object model intended for its initial production version, and the 
+user experience of that finished model can be effectively interpolated from this prototype (some imagination required).
+I recommend getting started with a trial run of the demo application uMail, as narrated 
+by the <a href="uMailUserGuide.html">uMail User's Guide</a>.  While it may appear primitive 
+(it runs on the command line, after all),
+uMail demonstrates a progressive concept called 
+<a href="Glossary.html#IntrinsicAccessibility">intrinsic accessibility</a>,
+which maximizes user options for customization while minimizing the user interface
+code of the application.  A complete <a href="DecafTutorial.html">tutorial</a> takes you step-by-step through
+the process of writing code in Decaf, and the end-user process of customizing uMail features.  The 
+<a href="api/c++/index.html">source code</a> for 
+uMail has been made available, so that you may see an example of integrating Decaf
+into an application.
+Take a look at the <a href="api/index.html" target="outer">Decaf API Documentation</a> for an 
+understanding of its composition.  If you feel ready to try customizing the editor, follow the instructions
+in the Decaf Customization Guide for <a href="DecafCustomizationGuide.html#Return">
+implementing the return statement</a>.
+<p>
+<h3>What this prototype does not demonstrate</h3>
+I am currently inviting corporate participation in the Decaf project; see the 
+<a href="BusinessProposal.html">business proposal</a> for details.  Because that could 
+result in a wide variety of implementation contexts, I have included in this prototype 
+only those features that cannot be found in typical industry applications, or validated by 
+a trivial analysis.  Among the missing features is a visual editor for the creation of 
+dialogs; this is demonstrated by numerous Java IDE's, such as Visual Age for Java from IBM,
+Borland JBuilder, and Symantec Visual Cafe.  Another is that the native integration library 
+<a href="api/c++/index.html#plugin">plugin.o</a>
+does not currently reload plugins after they have been edited by the user.  Implementing this feature is 
+a small hassle in Java, but not difficult; it is a requirement of servlet and JSP engines.  Compile errors in Decaf will in 
+the future be presented to the user by the 
+very same Java compiler class that detected the error.  This requires too much effort for
+a prototype, but take a look at the <a href="api/org/hs/generator/package-summary.html">
+org.hs.generator</a> package to see how it can be done effectively without a great deal of 
+tumult in the internal workings of the compiler.
+<p>
+
+</body>

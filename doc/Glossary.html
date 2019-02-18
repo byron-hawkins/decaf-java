@@ -1,0 +1,155 @@
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>Glossary</h2>
+
+<dl>
+
+<a name="IntrinsicAccessibility"/>
+<dt>Intrinsic Accessibility</a>
+<dd>By implementing customizable application objects with plugins (insofar as they can be customized),
+the developer maximizes accessibility while minimizing development effort.  See this principle
+<a href="TheHype.html#IntrinsicAccessibility">preached</a>&nbsp;and <a href="NativeIntegration.html#IntrinsicAccessibility">
+practiced</a>.
+<p>
+
+<a name="MinimalDrift"/>
+<dt>Minimal Drift
+<dd>In any development environment, the user will be required at times to <i>drift</i> away from the task at hand in pursuit
+of some information that is necessary for their progress.  I take the effectiveness of a development environment 
+to be a direct measure of the frequency of these interruptions, the number of steps required to be taken away from the 
+editor, and the potential for getting lost at each step.  See the minimization of drift <a href="DecafUserGuide.html#MinimalDrift">
+practiced</a> and <a href="TheHype.html#MinimalDrift">preached</a>. 
+<p>
+
+<a name="JavaAPI"/>
+<dt><a href="jdk/api/index.html" target="outer">Java API</a>
+<dd>The Java API contains almost the entire set of facilities provided by a <a href="#JRE">Java Runtime Environment</a>.  
+Only its primitive types are treated as langauge constructs, and even those have handles in the API.  
+<p>
+
+<a name="JRE"/>
+<dt><b>J</b>ava <b>R</b>untime <b>E</b>nvironment
+<dd>The JRE contains the <a href="#JVM">Java Virtual Machine</a> and a copy of the class library that comprises the 
+<a href="#JavaAPI">Java API</a>.  Its <a href="http://java.sun.com/j2se/1.4/download.html">download</a> is about 10MB,
+and it is available for commercial <a href="jdk/J2RE_License.html#Redistribution">redistribution</a>. 
+<p>
+
+<a name="JVM"/>
+<dt><b>J</b>ava <b>V</b>irtual <b>M</b>achine
+<dd>The JVM is the binary executable in which the Java language runs.  It may be <a href="api/c++/plugin.html#jVM">loaded</a>
+in the address space of any application, which may then <a href="api/c++/plugin.html#Plugin">call methods</a> on Java object 
+instances in that companion JVM.  A member of the family Suidae, the JVM is weighty and uncompromising in its use of
+<a href="http://java.sun.com/j2se/1.4/install-windows.html#requirements">system resources</a>.  
+<p>
+
+<a name="JNI"/>
+<dt><b>J</b>ava <b>N</b>ative <b>I</b>nterface
+<dd>Java was not originally designed to run in conjunction with other platform-specific code.  When the need arose, the
+keyword <code>native</code> was added to the language to refer to methods implemented in another language.
+Such implementations can only be accessed by Java when exported from a dynamic library.  The <a href="#JRE">JRE</a> comes 
+with a static library jvm.lib that provides C methods to instantiate and run the <a href="#JVM">JVM</a>, and along with 
+various (usually cumbersome) means of interacting with it.  The JNI is discussed (somewhat vaguely) in the 
+<a href="http://java.sun.com/docs/books/tutorial/native1.1/index.html"> Java Tutorial</a>.  While the JNI is not the most 
+elegant aspect of Java, it does in fact provide sufficient means for integrating Java with native code -- it's just a 
+hassle to work with it.  See the source code for the static library <a href="api/c++/index.html#plugin">plugin.o</a>
+for an example of what is required.
+<p>
+
+<a name="GarbageCollector"/>
+<dt>Garbage Collector
+<dd>When the reference count on a Java object goes to zero, the <a href="#JVM">JVM</a> marks it as disposable,
+such that a system process known as the garbage collector will eventually locate the object and free its
+memory.  One of the hassles of Java is that the garbage collector is neither efficient nor accurate; if 
+memory is at a premium and plugins are run repeatedly, Decaf will have to include some mechanism for dumping
+the JVM and reloading a new instance of it.  
+<p>
+
+<a name="KJC"/>
+<dt>KJC</dt>
+<dd>An open-source Java compiler from the <a href="http://www.dms.at/kopi">Kopi project</a>, which is covered under the 
+GNU General Public License.  
+<p>
+
+<a name="Jacks"/>
+<dt><a href="http://www-124.ibm.com/developerworks/oss/cvs/jikes/~checkout~/jacks/jacks.html">Jacks</a>
+<dd>This hip and masculine term refers to a compiler regression test from IBM that verifies the degree
+to which a compiler conforms to the <a href="http://java.sun.com/docs/books/jls/second_edition/html/jTOC.doc.html">
+Java Language Specification</a>.  If a compiler has "passed" Jacks, it definitively maintains each and 
+every requirement of the JLS.  
+<p>
+
+<a name="bytecode"/>
+<dt>Bytecode
+<dd>The term <i>bytecode</i> refers to a stream of bytes that is understood by the physical processor of a computer.  
+Java source files are compiled into Java <i>bytecode</i>, which is interpreted by the <a href="#JVM">Java Virtual
+Machine</a> when the code is executed or referenced.  Java bytecode differs from pure (processor-specific) bytecode
+in that it has been abstracted to run on a number of processors: Intel (PC), Alpha (PC), Motorola (Mac), SPARC (Unix), 
+AIX (Unix), etc., and it requires the <a href="#JVM">JVM</a> to translate it into pure bytecode as it runs.  
+<p>
+
+<a name="3GL"/>
+<dt>Third <b>G</b>eneration <b>L</b>anguage
+<dd>The term <i>3GL</i> refers to programming languages that are compiled, maintain strict rules about data types, and
+usually provide substantial structure.  They are known as the <i>third</i> generation because they compile into assembly
+language constructs (the <i>second</i> generation), which are further compiled into some variety of <a href="#bytecode">
+bytecode</a> (the <i>first</i> generation).  Common examples are Java, C and C++.  
+<p>
+
+<a name="4GL"/>
+<dt>Fourth <b>G</b>eneration <b>L</b>anguage
+<dd>The term <i>4GL</i> refers to programming languages that either compile into a <a href="#3GL">3GL</a>, or that are
+tranlated into <a href="#bytecode">bytecode</a> as they run (the latter are known as scripting languages).
+<p>
+
+<a name="token"/>
+<dt>Token
+<dd>The term <i>token</i> is used by compilers to refer to a set of characters delimited by whitespace (i.e., space, tab, and newline)
+and/or structural characters (i.e., semicolon, parenthese, quotation mark, comma, etc.).  Simply put, a token is a "word" of source
+code.  In Java, a token represents either a language keyword, a class name or member of a class (i.e., a field, method, or inner class).
+<p>
+
+<a name="parse"/>
+<dt>Parse
+<dd>The first step in compiling a file of source code is to <i>parse</i> the file, identifying each <a href="#token">token</a>
+as a language keyword, a reference to a data structure, or unknown (i.e., a parse error).
+<p>
+
+<p>
+<a name="alpha"/>
+<dt>Alpha
+<dd>An <i>alpha</i> model of a software product in development exhibits the fundamental object model of the finished
+product, but lacks implementation of features within that framework, and is typically full of glitches, errors, hassles, 
+<font size=-1>undefined conditions, hang points, unexpected behaviors, </font><font size=-2>display discrepancies, inconsistent 
+responses, incomprehensible user messages</font> ... that is to say, bugs.
+</dl>
+<p>
+
+
+
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+</body>

@@ -1,0 +1,392 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!--
+	<!DOCTYPE config PUBLIC "-//HawkinsSoftware//DTD config 1.0//EN" "http://somewhere/dtd/config.dtd">
+-->
+
+<!--
+Document structure:
+
+<EditorConfig>
+	<Setup>
+		<InstallRoot>
+		<BrowserCommand>
+		<PluginsPackage>
+		<CompileCommand>
+	<ClassComponents>
+		<NameComponent>		(see below)
+		<CustomComponent*>	
+	<MethodComponents>
+		<NameComponent>		(see below)
+		<ReturnComponent>	
+		<CustomComponent*>	
+	<ParameterComponents?>
+		<NameComponent>		(see below)
+		<TypeComponent>		
+		<CustomComponent*>	
+	<FieldComponents?>
+		<NameComponent>		(see below)
+		<TypeComponent>		
+		<CustomComponent*>	
+	<LocalComponents?>
+		<NameComponent>		(see below)
+		<TypeComponent>		
+		<CustomComponent*>	
+	<Grammars?>
+		<Phrase*>
+		<Sentence*>
+	<TypeChooserContent?>
+		<TypeCategory>
+			<TypeItem*>
+	<TypeDefinitions?>
+		<TypeDefinition*>
+			<Discussion?>
+			<Field*>
+			<Method*>
+				<Discussion?>
+				<Parameter*>
+				
+	---- end of structure ----
+	
+	
+
+Common elements:
+
+	<NameComponent>
+		<classname>
+		<Label?>
+		<FormLocation>
+	<ReturnComponent>
+		<classname>
+		<Label?>
+		<FormLocation>
+	<TypeComponent>
+		<classname>
+		<Label?>
+		<FormLocation>
+	<CustomComponent>
+		<classname>
+		<FormLocation>
+-->
+
+<!-- ++++++++++++++ Root ++++++++++++++ -->
+
+<!--
+The EditorConfig element is the root element of this Decaf configuration
+specification format.  
+-->
+<!ELEMENT EditorConfig (Setup, ClassComponents, MethodComponents, ParameterComponents?, FieldComponents?, LocalComponents?, Grammars?, TypeChooserContent?, TypeDefinitions?)>
+
+
+
+<!-- ++++++++++++++ Setup +++++++++++++++ -->
+
+<!--
+The Setup element contains information required by Decaf at startup.
+-->
+<!ELEMENT Setup (InstallRoot,BrowserCommand,PluginsPackage,CompileCommand)>
+
+<!--
+The InstallRoot element specifies the absolute path of the root 
+directory of the Decaf demo installation.  Unless it's been changed,
+the directory itself will be named "decaf_demo" 
+-->
+<!ELEMENT InstallRoot (#PCDATA)>
+
+<!--
+Not currently used
+-->
+<!ELEMENT BrowserCommand (#PCDATA)>
+
+<!-- 
+The PluginsPackage element specifies the package name that is applied 
+to all user plugins.  The user currently has no options regarding package 
+name or even directory of compilation output, so as to simplify the 
+situation.  Therefore output location is determined here.
+-->
+<!ELEMENT PluginsPackage (#PCDATA)>
+
+<!--
+The system command for the Java compiler.  Please use absolute path to
+avoid path issues.  Default is $decaf_demo/bin/jikes
+-->
+<!ELEMENT CompileCommand (#PCDATA)>
+
+
+<!-- ++++++++++++++ Editor Components +++++++++++++++ -->
+
+<!--
+The ClassComponents element is loaded by the ClassEditor on Decaf startup 
+and used as a template for constructing its display.  The NameComponent is 
+required, as all classes must minimally have a name.  Any further facilities 
+are added with CustomComponent elements.
+-->
+<!ELEMENT ClassComponents (NameComponent,CustomComponent*)>
+
+<!--
+The MethodComponents element is loaded by the MethodEditor on Decaf startup
+and used as a template for constructing its display.  The NameComponent and
+ReturnComponent are required, since all methods must minimally have a name
+and return type.  Further factilites can be provided through the CustomComponent
+element.
+-->
+<!ELEMENT MethodComponents (NameComponent,ReturnComponent,CustomComponent*)>
+
+<!--
+The ParameterComponents, FieldComponents and LocalComponents elements are loaded 
+by the VariableEditor on Decaf startup and used as a template for constructing its 
+display of method parameters, class fields and local variables, respectively.
+The NameComponent and TypeComponent are required as minimal constituents of a 
+variable.  Further facilities are be provided with the CustomComponent element
+-->
+<!ELEMENT ParameterComponents (NameComponent,TypeComponent,CustomComponent*)>
+<!ELEMENT FieldComponents (NameComponent,TypeComponent,CustomComponent*)>
+<!ELEMENT LocalComponents (NameComponent,TypeComponent,CustomComponent*)>
+
+<!--
+The NameComponent, ReturnCompnent and TypeComponent each specify a subclass of 
+java.awt.Component that displays and provides facilities for the user to edit 
+the name, return type or variable type of its corresponding entity (respectively).
+The NameComponent must implement com.bitwise.decaf.editor.DecafTextComponent,
+and the ReturnComponent and TypeComponent must implement DecafTypeComponent.
+The classname specifies the component class, which will be instantiated with 
+its requisite default no-arg constructor.  The Represents element specifies the
+field in the corresponding code construct that the component applies to; see the 
+element for more information.  The Label and FormLocation specify parameters to
+org.hs.jfc.FormLayout, which is used to assemble the main panel of the editor.
+-->
+<!ELEMENT NameComponent (classname, Label?, FormLocation)>
+<!ELEMENT ReturnComponent (classname, Label?, FormLocation)>
+<!ELEMENT TypeComponent (classname, Label?, FormLocation)>
+
+<!--
+The CustomComponent element specifies a java.awt.Component to be used in a
+ClassEditor, MethodEditor or VariableEditor.  The component class, specified by
+the classname sub-element, must implement com.bitwise.decaf.editor.MaskComponent
+and org.hs.jfc.HotComponent.  The FormLocation specifies parameters to the editor's 
+org.hs.jfc.FormLayout, which is used to lay out its main panel.
+-->
+<!ELEMENT CustomComponent (classname, FormLocation)>
+
+<!--
+The Represents element is not currently being used, since I've decided to code 
+this information into the component classes themselves.  Were it used, it would
+specify the public instance field of the subclass of org.hs.generator.GConstruct 
+that is being edited by the declaring component.  It is resolved at Decaf startup 
+to a java.lang.reflect.Field by first resolving the java.lang.Class for classname 
+and then calling getField() with the fieldname.  
+<!ELEMENT Represents (classname, fieldname)>
+-->
+
+<!--
+The classname element represents the fully qualified classname of an editor entity
+-->
+<!ELEMENT classname (#PCDATA)>
+
+<!--
+The fieldname element represents the name by which the intended field can be found
+through call to java.lang.Class.getField(String).
+-->
+<!ELEMENT fieldname (#PCDATA)>
+
+<!--
+The Label element specifies label text to go with a field of an editor.
+-->
+<!ELEMENT Label (#PCDATA)>
+
+<!--
+The FormLocation element specifies parameters to an instance of org.hs.jfc.FormLayout,
+which presumably is being applied by the entity that declares this FormLayout element. 
+-->
+<!ELEMENT FormLocation (row, column, fillRightPct?)>
+
+<!-- See element FormLocation -->
+<!ELEMENT row (#PCDATA)>
+
+<!-- See element FormLocation -->
+<!ELEMENT column (#PCDATA)>
+
+<!-- See element FormLocation -->
+<!ELEMENT fillRightPct (#PCDATA)>
+
+<!-- See element FormLocation -->
+<!ATTLIST FormLocation mode (DEFAULT|FREE_LABEL|FREE_FIELD|LABEL_ON_TOP) "DEFAULT">
+
+
+
+<!-- ++++++++++++++ Editor Grammars +++++++++++++++ -->
+
+<!--
+The Grammars element specifies a list of grammars available to Decaf.  A grammar
+must implement com.bitwise.decaf.editor.grammar.GrammarMask, and will be included
+in the Sentence and/or Phrase menu as indicated by this element.
+-->
+<!ELEMENT Grammars (Phrase*,Sentence*)>
+
+<!-- 
+The Phrase element specifies the classname of a grammar component, which must
+implement com.bitwise.decaf.editor.grammar.GrammarMask.  It will be resolved at
+Decaf startup and queried for a Collection of actions, via GrammarMask method
+phraseGrammars(), that will be placed in the system's Phrase menu.
+-->
+<!ELEMENT Phrase (#PCDATA)>
+
+<!-- 
+The Sentence element specifies the classname of a grammar component, which must
+implement com.bitwise.decaf.editor.grammar.GrammarMask.  It will be resolved at
+Decaf startup and queried for a Collection of actions, via GrammarMask method
+sentenceGrammars(), that will be placed in the system's Phrase menu.
+-->
+<!ELEMENT Sentence (#PCDATA)>
+
+
+
+<!-- ++++++++++++++ Type Chooser +++++++++++++++ -->
+
+<!--
+The TypeChooserContent element specifies the contents of the type tree in the
+com.bitwise.decaf.editor.TypeChooser.  Available types are contained in a single
+layer of TypeCategory, and are specified by the uid attribute of the TypeDefinition
+to which they correspond.  Documentation that shows up in the TypeChooser is 
+specified by the TypeDefinition element. 
+-->
+<!ELEMENT TypeChooserContent (TypeCategory*)>
+
+<!--
+The TypeCategory specifies a category node in the TypeChooser's type tree.
+-->
+<!ELEMENT TypeCategory (TypeItem*)>
+
+<!--
+The name attribute of a TypeCategory element specifies the category name in text.
+-->
+<!ATTLIST TypeCategory name CDATA #REQUIRED>
+
+<!--
+The TypeItem element specifies a type in the TypeChooser's type tree by uid reference 
+to a TypeDefinition element.
+-->
+<!ELEMENT TypeItem EMPTY>
+
+<!--
+The uid attribute of a TypeItem element refers to a TypeDefinition element.
+-->
+<!ATTLIST TypeItem uid IDREF #REQUIRED>
+
+
+<!-- ++++++++++++++ Type Definitions +++++++++++++++ -->
+
+<!ELEMENT TypeDefinitions (TypeDefinition*)>
+
+<!--
+A TypeDefinition element provides information about a type (a java.lang.Class,
+that is) to the system.  It offers a discussion of the type, to be made visible
+in the TypeChooser, if not elsewhere; and provides a listing of known fields and
+methods.  These latter entities may be themselves described in detail, or they 
+may be hidden from the user (to avoid the clutter of unusable class members).
+-->
+<!ELEMENT TypeDefinition (Discussion?,Field*,Method*)>
+
+<!--
+The Classname attribute specifies the fully qualified classname of the type to 
+which this TypeDefinition refers.  The value "#user" is specially understood to
+refer to the user's plugin class (whatever its name turns out to be).  This allows
+the system to be configured with documentation for expected plugin methods.
+-->
+<!ATTLIST TypeDefinition Classname CDATA #REQUIRED>	
+
+<!--
+The uid attribute provides an identifier by which other elements in the xml document
+implement this DTD may refer to this TypeDefinition.  The uid is also the name that 
+appears for this type throughout Decaf, so choose with the user's understanding in mind.
+-->
+<!ATTLIST TypeDefinition uid ID #REQUIRED>
+
+<!--
+The superMethods attribute specifies which super class methods of the specified
+type should be included in the system.  A value of ALL includes all methods available.
+A value of DETAILED will exclude all super class methods not detailed in 
+this TypeDefinition element (by a Method sub-element).
+-->
+<!ATTLIST TypeDefinition superMethods (ALL|DETAILED) "DETAILED">
+
+<!--
+The declaredMethods attribute specifies which declared methods of the specified
+type should be included in the system.  A value of ALL includes all methods available.
+A value of DETAILED will exclude all declared methods not detailed in 
+this TypeDefinition element (by a Method sub-element). 
+-->
+<!ATTLIST TypeDefinition declaredMethods (ALL|DETAILED) "ALL">
+
+<!--
+The Method element specifies a method of a Java type (a java.lang.Class), and may provide
+detailed information about it for display in the TypeChooser (and elsewhere), or may simply
+hide the method from view (especially if it is not usable in the current context of Decaf).
+-->
+<!ELEMENT Method (Discussion?,Parameter*)>
+
+<!--
+The name attribute specifies the name of the Method.
+-->
+<!ATTLIST Method name CDATA #REQUIRED>
+
+<!--
+The hide attribute, if true, will prevent the Method from appearing in the TypeChooser.
+-->
+<!ATTLIST Method hide (true|false) "false">
+
+<!--
+The Field element specifies a field of a Java type (a java.lang.Class), and may hide the
+field from view (especially if it is not usable in the current context of Decaf).  It may
+contain a discussion, which should be entered as the body of the element.
+-->
+<!ELEMENT Field (#PCDATA)>		
+
+<!--
+The name attribute specifies the name of the Field.
+-->
+<!ATTLIST Field name CDATA #REQUIRED>
+
+<!--
+The hide attribute, if true, prevents this Field from showing up in the TypeChooser.
+-->
+<!ATTLIST Field hide (true|false) "false">
+
+<!--
+The Parameter element specifies a parameter to a method, in a Method element, so as to 
+uniquely identify the method.  It may contain a discussion, which should be entered as 
+the body of the element.
+-->
+<!ELEMENT Parameter (#PCDATA)>	
+
+<!--
+The type attribute refers to a TypeDefinition, by uid, that specifies the type 
+(java.lang.Class) of the Parameter.  Implied here is that for every method made 
+explicitly available to Decaf, each of its parameter's types must be explicitly 
+declared in a TypeDefinition element.
+-->
+<!ATTLIST Parameter type IDREF #REQUIRED>
+
+<!--
+The name attribute refers to the name of the Parameter; it is arbitrary, and serves 
+only to clarify the purpose of the parameter to the user.  The Parameter name will
+show up in the TypeChooser, and in grammar components making use of the methods of 
+external types (i.e., types not currently being created by the user).
+-->
+<!ATTLIST Parameter name CDATA "">
+
+<!--
+The dimensions attribute refers to the array dimensions of the Parameter.  A value of 
+zero, which is the default, will of course indicate that the parameter is not of an 
+array type.  
+-->
+<!ATTLIST Parameter dimensions CDATA "0">
+
+<!--
+The discussion element provides documentation for its declaring element, usually 
+oriented towards the user and geared for their expected purpose and level of 
+understanding.  Discussions will show up in the TypeChooser, and may be made use
+of by custom components throughout the system.
+-->
+<!ELEMENT Discussion (#PCDATA)>
+

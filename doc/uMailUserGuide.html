@@ -1,0 +1,104 @@
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>uMail User's Guide</h2>
+The Decaf prototype can be demonstrated in action with the native C++ application uMail, 
+"the mail client that does what you want".  Run uMail from a command prompt in its home
+directory decaf_demo/umail.  At the login prompt, type any user name you like; your account
+will be created if it does not already exist.  The application is basic and self-explanatory:
+select menu items by number, and enter information when prompted for it.  When you send an email message, uMail
+will look in its account list for the recipient you have addressed; if not found, uMail will
+create an account with that address as its username upon delivering the message.  Log in to a recipient's account
+to view messages that have arrived there.  Note that the default implementation of the 
+system function <b>Send Mail</b> (located from the main menu at <b>View Plugins</b>><b>System 
+Operations</b>><b>Send Mail</b>) delivers a copy of the message to the sender's <b>Sent Items</b> message folder.
+<p>
+<h3>uMail plugins</h3>
+In a column to the right of the 
+menu options you will see a list of names in &lt;angle brackets&gt;.  Each name corresponds to 
+the Java class (a plugin) that currently implements the menu item to its left.  As 
+indicated at the prompt, you may edit any plugin by entering its menu item number followed
+by the letter <b>e</b>; in this way, uMail can be made to do what you want.  uMail will tell you the 
+name of the plugin method for the operation you have selected at the command prompt
+while it opens Decaf with the specified class file.  If the plugin method does not exist in that class, Decaf
+will create an empty method with the appropriate name and signature.  
+<p>
+<b>Why C++?</b><br>
+You won't have to look at uMail
+very long to see that it could be entirely implemented in Decaf plugins.  But imagine for a moment that 
+instead of uMail, this demonstration were based on your favorite email client.  These plugin methods
+could remain the same, regardless of what that client is, because the user interactions facilities are
+part of the main application and passed to the plugin as abstract entities.  Classes such as Prompt, 
+DataDisplay and MessageInput can be implemented with text, or graphics, or anything else.  uMail simply
+demonstrates the principle of plugins, even though they are not essentially distinct in its particular case.
+<p>
+<b>Plugin files</b><br>
+Behind the scenes, Decaf has been 
+instructed by its uMail-specific configuration to use the package name <b>com.bitwise.umail</b> for all its 
+plugin classes.  When you open the default plugin class &lt;uMailPlugins&gt;, Decaf looks
+in the directory <b>decaf_demo/decaf/com/bitwise/umail</b> for the file named uMailPlugins.cup.  This
+file compiles into the class <b>com.bitwise.umail.uMailPlugins</b>, which goes by the shortened alias
+uMailPlugins in uMail.  Note that it takes especially long to open
+the Decaf editor the first time in a particular uMail session; thereafter it is much faster.  
+<p>
+<h3>User customization of uMail</h3>
+Beyond the simple process of editing uMail's <a href="Glossary.html#IntrinsicAccessibility">intrinsically defined</a> 
+plugins, a uMail user is also given opportunity to add plugins to the system in certain places.  This section gives
+general instructions for adding plugins to uMail in this way.  Please refer to the <a href="DecafUserGuide.html">
+Decaf User's Guide</a> for information on getting around the Decaf editor.  More detailed step-by-step instructions for adding
+features to uMail at the user level are provided by the <a href="DecafTutorial.html">Decaf Tutorial</a>.  <p>
+
+<b>Adding a standalone plugin</b><br>
+<dir>
+<li>Log in to uMail and choose option <b>3) View Plugins</b>, then <b>2) Plugins</b> to see the list of user-invoked
+plugins currently available.  This menu was itself created by a plugin, as we are about to see.
+<li>Choose option <b>Done</b> to move up to the <b>View Plugins</b> menu, and see that (in the default case)
+the Java class &lt;uMailPlugins&gt; is responsible for creating the plugin menu.
+<li>Enter <b>2e</b> to edit &lt;uMailPlugins&gt;; uMail explains that the method in action here is named <b>getPluginMenu()</b>.
+<li>Double-click the method <b>getPluginMenu()</b> and read the instructions at the top of the <b>Method Editor</b>
+for adding plugins to this menu.
+<li>Open the <a href="DecafUserGuide.html#TypeChooser">Type Chooser</a> with ctrl-T and see the type <b>Plugins</b>
+in the <b>uMail</b> category for instructions on creating a plugin menu item.
+<li>Note that the <b>Plugin</b> type represents the Java class com.bitwise.uMail.jMenuOption, which is implemented
+by the uMail class <a href="api/c++/jMail.html#jMenuOption">jMenuOption</a>.
+<li>Return to uMail and choose <b>2) Plugins</b> again to view the plugins menu.  Notice that a separate Java class is 
+assigned to each plugin in the menu; one class can define a plugin, while another implements it.
+<li>Note that the plugin menu is created by a call to <b>getPluginMenu()</b> every time it is displayed, so that
+context-specific provisions may be made; for example, certain plugins might only be valid for certain days of the week,
+and would otherwise not be displayed.  
+</dir>
+<p>
+<b>Adding a folder menu plugin</b><br>
+Plugins may be added to the folder menu in a similar way.  The folder menu is constructed by the plugin method
+named <b>getFolderMenu()</b>; its assignment can be seen next to the <b>View Mail</b> menu option, and also appears
+next to the name of every folder menu item in the tree of mail folders.  Edit the plugin from any of these locations, 
+and double-click the method <b>getFolderMenu()</b>; further instructions for adding items to the folder menu will 
+appear at the top of the <b>Method Editor</b>.
+<p>
+Notice that if you browse mail folders, the message menu items don't show the arrival time of the message.  You have
+to read the message to find out when it arrived.  What a nuisance!  What can we do about this?  Since we have access 
+to everyone's account, log in to <b>zak</b>'s account to see how he displays the number of items in each folder next 
+to its entry in the folder menu.  In the real world, we would of course have to ask Zak for a copy of his <b>getFolderMenu()</b>
+method, or at least for his expertise in adding features in it.  Edit the folder menu plugin with <b>2e</b> from the 
+main menu, and double-click <b>getFolderMenu()</b> to see Zak's fancy 
+<p>
+<h3>Developer customization of uMail</h3>
+If you experiment with uMail and its plugins for very long, you will notice that there are enough features 
+missing from the Decaf editor and the uMail API to make your work a little difficult.  I encourage
+you to explore the <a href="NativeIntegration.html">Native Integration</a>, the
+<a href="config.dtd">Configuration DTD</a> and the 
+<a href="DecafCustomizationGuide.html">Decaf Customization Guide</a> for information on adding 
+features to Decaf and uMail, and customizing existing features.  You may even be interested in implementing 
+one or two new features yourself, just to see what is involved.  For example, it is currently awkward to 
+implement a "Move" menu item in the folder menu.  Why is that?  What is required to make this feature more easily 
+available to a uMail user?
+<p>
+*<fn>Note that plugins are not reloaded by uMail after they have been edited.  You will need to exit uMail
+and start it again to see modifications to your plugins.  This nuisance will of course be vanquished in the production
+version of Decaf.
+
+</body>

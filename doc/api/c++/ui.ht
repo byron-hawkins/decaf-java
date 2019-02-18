@@ -1,0 +1,437 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../umail/ui.h</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>/*
+ * Copyright (C) 2003 HawkinsSoftware
+ *
+ * This prototype of the Decaf Java development environment is free 
+ * software.  You can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software 
+ * Foundation.  However, no compilation of this code or a derivative
+ * of it may be used with or integrated into any commercial application,
+ * except by the written permisson of HawkinsSoftware.  Future versions 
+ * of this product will be sold commercially under a different license.  
+ * HawkinsSoftware retains all rights to this product, including its
+ * concepts, design and implementation.
+ *
+ * This prototype is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */</font>
+<font color=#9A1900>// &lt;[a name="start"/]&gt;
+</font>
+<font color=#9A1900>// ui.h
+</font>
+<font color=#9A1900>/*
+This file contains the implementation of uMail's user interface details.  It is
+full of menus, prompts and display facilities.
+*/</font>
+
+<font color=#0000FF>#ifndef</font> __ui_h__
+<font color=#0000FF>#define</font> __ui_h__
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;umail.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;forward.h&gt;</font>
+
+<font color=#0000FF>using</font> <font color=#0000FF>namespace</font> ::std;
+
+<font color=#9A1900>// &lt;[a name="MenuItem"/]&gt;
+</font><font color=#9A1900>/*
+Abstraction of a menu item, which consists either of a user option, labeled with
+a number, or simply a message to be displayed as part of the menu text.
+*/</font>
+<font color=#0000FF>class</font> MenuItem
+{
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>static</font> <font color=#0000FF>const</font> <font color=#009900>int</font> OPTION;
+    <font color=#0000FF>static</font> <font color=#0000FF>const</font> <font color=#009900>int</font> MESSAGE;
+    
+    <font color=#0000FF>virtual</font> <font color=#009900>int</font> getType() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> <font color=#009900>int</font> display() = <font color=#CC33CC>0</font>;
+};
+
+<font color=#9A1900>// &lt;[a name="MenuOption"/]&gt;
+</font><font color=#9A1900>/*
+A menu option, labeled with a number for user selection.  Subclasses implement
+choose(), which is called with this option is chosen by the user.  If the option
+implies system exit, return true from requiresExit(); if the option indicates 
+a step up to the previous menu in the stack, return true from done().  Implements
+MenuItem::getType() by returning OPTION.
+*/</font>
+<font color=#0000FF>class</font> MenuOption : <font color=#0000FF>public</font> Activity, MenuItem
+{
+<font color=#0000FF>public</font>:
+    MenuOption() : Activity() {};
+    MenuOption(Activity* a) : Activity(a) {};
+    <font color=#0000FF>virtual</font> <font color=#009900>void</font> choose() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> <font color=#009900>bool</font> requiresExit();
+    <font color=#0000FF>virtual</font> <font color=#009900>bool</font> done();
+    <font color=#009900>int</font> getType();
+};
+
+<font color=#9A1900>// &lt;[a name="MenuMessage"/]&gt;
+</font><font color=#9A1900>/*
+Message text for display with a menu.  Implements MenuItem::getType() by 
+returning MESSAGE.  I'm not using this class at the moment, but feel free
+to export it to Java for additional plugin mayhem.
+*/</font>
+<font color=#0000FF>class</font> MenuMessage : <font color=#0000FF>public</font> MenuItem
+{
+<font color=#0000FF>private</font>:
+    string message;
+<font color=#0000FF>public</font>:
+    MenuMessage(string m) : message(m) {};
+    <font color=#009900>int</font> display();
+    <font color=#009900>int</font> getType();
+};
+
+<font color=#9A1900>// &lt;[a name="TextMenuOption"/]&gt;
+</font><font color=#9A1900>/*
+A menu option with display text, optionally activating the 
+&lt;[a href="uMail.html#Activity"]&gt;Activity&lt;[/a]&gt; superclass
+in TextMenuOption(string, string).  
+*/</font>
+<font color=#0000FF>class</font> TextMenuOption : <font color=#0000FF>public</font> MenuOption
+{
+<font color=#0000FF>private</font>:
+    <font color=#009900>void</font> init(string text);
+<font color=#0000FF>protected</font>:
+    string displayText;
+<font color=#0000FF>public</font>:
+    TextMenuOption(string text);
+    TextMenuOption(string text, string identifier);
+    <font color=#009900>int</font> display();
+};
+
+<font color=#9A1900>// &lt;[a name="PluginMenuOption"/]&gt;
+</font><font color=#9A1900>/*
+A menu option representing a user plugin, which it runs upon its selection.
+*/</font>
+<font color=#0000FF>class</font> PluginMenuOption : <font color=#0000FF>public</font> TextMenuOption
+{
+<font color=#0000FF>public</font>:
+    PluginMenuOption(string text, string pluginMethodName);
+    <font color=#009900>void</font> choose();
+    string getDisplayText();
+};    
+
+<font color=#9A1900>// &lt;[a name="MessageMenuOption"/]&gt;
+</font><font color=#9A1900>/*
+A menu option representing a mail message.  Choosing this option runs its 
+plugin with the message and a MessageDisplay (below, providing user facilities
+for displaying the message).
+*/</font>
+<font color=#0000FF>class</font> MessageMenuOption : <font color=#0000FF>public</font> TextMenuOption
+{
+<font color=#0000FF>private</font>:
+    Message* message;
+    
+<font color=#0000FF>public</font>:
+    MessageMenuOption(string text, Message* m);
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="FolderMenuOption"/]&gt;
+</font><font color=#9A1900>/*
+A menu option representing a mail folder.  Runs a FolderMenu (below) with 
+its folder member when chosen.
+*/</font>
+<font color=#0000FF>class</font> FolderMenuOption : <font color=#0000FF>public</font> TextMenuOption
+{
+<font color=#0000FF>private</font>:
+    Folder* folder;
+<font color=#0000FF>public</font>:
+    FolderMenuOption(Folder* folder);
+    FolderMenuOption(string d, Folder* folder);
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="PluginFolderMenuOption"/]&gt;
+</font><font color=#9A1900>/*
+A plugin that resides in a folder menu.  It displays itself in the menu as the 
+name of the plugin, and runs its plugin with the active account and the folder
+when chosen.  For example, the "delete" folder menu option is implemented as a
+PluginFolderMenuOption.
+*/</font>
+<font color=#0000FF>class</font> PluginFolderMenuOption : <font color=#0000FF>public</font> TextMenuOption
+{
+<font color=#0000FF>private</font>:
+    Folder* folder;
+<font color=#0000FF>public</font>:
+    PluginFolderMenuOption(string text, Folder* f, string runMethodName);
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="Menu"/]&gt;
+</font><font color=#9A1900>/*
+An abstraction of a menu that maintains the list of menu items, and the question 
+with which the user is prompted.  It is responsible for running the menu in 
+askUser(), which routes the user's choice to the selected menu option, to Decaf
+for plugin editing, or to Account (see account.o) with a new plugin assignment 
+(depending on the user's response).  
+*/</font>
+<font color=#0000FF>class</font> Menu
+{
+<font color=#0000FF>private</font>:
+    string title;
+<font color=#0000FF>protected</font>:
+    List* items;
+    string question;
+
+    Menu(string t) : title(t) {};
+<font color=#0000FF>public</font>:
+    Menu(string t, List* i, string q) : title(t), items(i), question(q) {};
+    Menu(<font color=#0000FF>const</font> Menu&amp; m);
+    string getTitle();
+    MenuOption* askUser();
+    <font color=#009900>void</font> add(MenuOption* option);
+    <font color=#009900>int</font> getSize();
+    <font color=#0000FF>virtual</font> <font color=#009900>bool</font> go();
+};
+
+<font color=#9A1900>// &lt;[a name="FolderMenu"/]&gt;
+</font><font color=#9A1900>/*
+The folder menu, which calls its plugin to establish its menu items, and always
+appends an item "Done" to the end of the list (which ends this menu and goes
+one step up the menu stack when chosen).
+*/</font>
+<font color=#0000FF>class</font> FolderMenu : <font color=#0000FF>public</font> Menu, Activity
+{
+<font color=#0000FF>private</font>:
+    Folder* folder; 
+<font color=#0000FF>public</font>:
+    FolderMenu(string t, Folder* f, Activity* a); 
+    
+    <font color=#0000FF>static</font> <font color=#009900>void</font> activate(Activity* a);
+};
+
+<font color=#9A1900>// &lt;[a name="PluginMenu"/]&gt;
+</font><font color=#9A1900>/*
+The menu of user plugins, which may be run independently of any system activity
+(each of these plugins always takes a single Account parameter).  
+*/</font>
+<font color=#0000FF>class</font> PluginMenu : <font color=#0000FF>public</font> Menu, Activity
+{
+<font color=#0000FF>public</font>:
+    PluginMenu(string t, Activity* a);
+};
+
+<font color=#9A1900>// &lt;[a name="Prompt"/]&gt;
+</font><font color=#9A1900>/*
+A device for prompting the user.  It does obvious things that could easily be 
+done from within a plugin, but it is meant to represent user interface features
+that are not completely exposed to user plugins (i.e., pretend its some fancy
+graphical thing the users aren't allowed to touch).  
+*/</font>
+<font color=#0000FF>class</font> Prompt 
+{
+<font color=#0000FF>protected</font>:
+    string display;
+    <font color=#009900>int</font> maxLength;
+    <font color=#009900>bool</font> atomic;
+<font color=#0000FF>public</font>:
+    Prompt(string d, <font color=#009900>bool</font> a);
+    string askUser(string defaultResponse = <font color=#FF0000>""</font>);
+};
+
+<font color=#9A1900>// &lt;[a name="MessageInput"/]&gt;
+</font><font color=#9A1900>/*
+A device for obtaining the contents of new mail messages from the user.
+*/</font>
+<font color=#0000FF>class</font> MessageInput
+{
+<font color=#0000FF>private</font>:
+    Message* message;
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>static</font> Prompt* to;
+    <font color=#0000FF>static</font> Prompt* subject;
+    <font color=#0000FF>static</font> Prompt* body;
+    
+    MessageInput(Message* m) : message(m) {};
+    Message* getMessage();
+};
+
+<font color=#9A1900>// &lt;[a name="DisplayContext"/]&gt;
+</font><font color=#9A1900>/*
+A base class providing facilities for aligning labeled text in nice columns.
+*/</font>
+<font color=#0000FF>class</font> DisplayContext
+{
+<font color=#0000FF>protected</font>:
+    <font color=#009900>int</font> shortest;
+    <font color=#009900>int</font> longest;
+<font color=#0000FF>public</font>:
+    DisplayContext();
+    
+    <font color=#9A1900>// notify this DisplayContext that a label of (length) has been added to
+</font>    <font color=#9A1900>// the context
+</font>     <font color=#009900>void</font> apply(<font color=#009900>int</font> length);    
+};
+
+<font color=#9A1900>// &lt;[a name="DataDisplay"/]&gt;
+</font><font color=#9A1900>/*
+Provides facilities for displaying a label-value pair
+*/</font>
+<font color=#0000FF>class</font> DataDisplay
+{
+<font color=#0000FF>private</font>:
+    DisplayContext* context;
+    string label;
+    string value;
+    <font color=#009900>int</font> valueOffset;
+<font color=#0000FF>public</font>:
+    DataDisplay(DisplayContext* c, string l);
+    DataDisplay(DisplayContext* c);
+    <font color=#009900>void</font> setLabel(string l);
+    <font color=#009900>void</font> setValue(string v);
+    <font color=#009900>int</font> display();
+    
+    <font color=#0000FF>friend</font> <font color=#0000FF>class</font> MessageDisplay;
+};
+
+<font color=#9A1900>// &lt;[a name="MessageDisplay"/]&gt;
+</font><font color=#9A1900>/*
+Provides facilities for displaying a message.
+*/</font>
+<font color=#0000FF>class</font> MessageDisplay : <font color=#0000FF>public</font> DisplayContext
+{
+<font color=#0000FF>private</font>:
+    Message* message;
+<font color=#0000FF>public</font>:
+    DataDisplay* from;
+    DataDisplay* subject;
+    DataDisplay* body;
+    DataDisplay* sentTime;
+    
+    MessageDisplay(Message* m);
+    Message* getMessage();
+    <font color=#009900>void</font> initValues();
+    <font color=#009900>void</font> align();
+};
+
+<font color=#9A1900>// &lt;[a name="CreateMessage"/]&gt;
+</font><font color=#9A1900>/*
+Menu option for sending a new message.  When chosen, calls its plugin with a new 
+mail message, initialized as being sent from the active account, and a 
+MessageInput (above).
+*/</font>
+<font color=#0000FF>class</font> CreateMessage : TextMenuOption
+{
+<font color=#0000FF>public</font>:
+    CreateMessage();
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="MailViewer"/]&gt;
+</font><font color=#9A1900>/*
+A menu option that, when chosen, initiates the stack of folder menus.
+*/</font>
+<font color=#0000FF>class</font> MailViewer : TextMenuOption
+{
+<font color=#0000FF>public</font>:
+    MailViewer();
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="PluginViewer"/]&gt;
+</font><font color=#9A1900>/*
+A menu option displaying two items: system and user plugins.
+*/</font>
+<font color=#0000FF>class</font> PluginViewer : TextMenuOption
+{
+<font color=#0000FF>private</font>:
+    Menu* menu;
+<font color=#0000FF>public</font>:
+    PluginViewer();
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="SystemOperations"/]&gt;
+</font><font color=#9A1900>/*
+A menu option which, when chosen, shows the system operations not directly 
+attached to any ui event.
+*/</font>
+<font color=#0000FF>class</font> SystemOperations : <font color=#0000FF>public</font> MenuOption
+{
+<font color=#0000FF>private</font>:
+    Menu* menu;
+<font color=#0000FF>public</font>:
+    SystemOperations();
+    <font color=#009900>void</font> choose();
+    <font color=#009900>int</font> display();
+};
+
+<font color=#9A1900>// &lt;[a name="SystemOperation"/]&gt;
+</font><font color=#9A1900>/*
+A menu option representing a particular system operation; allows its plugin to
+be set, and gives a description of the operation on choose().
+*/</font>
+<font color=#0000FF>class</font> SystemOperation : <font color=#0000FF>public</font> MenuOption
+{
+<font color=#0000FF>private</font>:
+    string displayText;
+    string description;
+<font color=#0000FF>public</font>:
+    SystemOperation(string disp, string desc, Activity* activity);
+    <font color=#009900>void</font> choose();
+    <font color=#009900>int</font> display();
+};
+
+<font color=#9A1900>// &lt;[a name="Plugins"/]&gt;
+</font><font color=#9A1900>/*
+A menu option that, when chosen, displays a mneu of user plugins.
+*/</font>
+<font color=#0000FF>class</font> Plugins : <font color=#0000FF>public</font> TextMenuOption
+{
+<font color=#0000FF>public</font>:
+    Plugins();
+    <font color=#009900>void</font> choose();
+};
+
+<font color=#9A1900>// &lt;[a name="StepUp"/]&gt;
+</font><font color=#9A1900>/*
+The "Done" menu option (or any other wishing to indicate termination of the 
+current menu and a step up to the previous menu in the menu stack).
+*/</font>
+<font color=#0000FF>class</font> StepUp : TextMenuOption
+{
+<font color=#0000FF>public</font>:
+    StepUp(string t, string n);
+    <font color=#009900>void</font> choose();
+    <font color=#009900>bool</font> done();
+};
+
+<font color=#9A1900>// &lt;[a name="Exit"/]&gt;
+</font><font color=#9A1900>/*
+A menu option representing the end.
+*/</font>
+<font color=#0000FF>class</font> Exit : <font color=#0000FF>public</font> TextMenuOption
+{
+<font color=#0000FF>public</font>:
+    Exit();
+    <font color=#009900>void</font> choose();
+    <font color=#009900>bool</font> requiresExit();
+    <font color=#009900>bool</font> done();
+};
+
+<font color=#0000FF>#endif</font>
+</tt>
+</pre>
+</body>
+</html>

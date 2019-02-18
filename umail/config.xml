@@ -1,0 +1,968 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE config PUBLIC "-//HawkinsSoftware//DTD config 1.0//EN" "http://somewhere/dtd/config.dtd">
+
+<EditorConfig>
+	<Setup>
+		<InstallRoot>c:\dev\decaf_demo</InstallRoot>
+		<BrowserCommand></BrowserCommand>
+		<PluginsPackage>com.bitwise.umail</PluginsPackage>
+		<CompileCommand>c:\dev\decaf_demo\bin\jikes</CompileCommand>
+	</Setup>
+	<ClassComponents>
+		<NameComponent>
+			<classname>com.bitwise.decaf.editor.DTextField</classname>
+			<FormLocation>
+				<row>0</row>
+				<column>0</column>
+			</FormLocation>
+		</NameComponent>
+		<CustomComponent>
+			<classname>com.bitwise.decaf.editor.Fields</classname>
+			<FormLocation mode="LABEL_ON_TOP">
+				<row>10</row>
+				<column>0</column>
+			</FormLocation>
+		</CustomComponent>
+		<CustomComponent>
+			<classname>com.bitwise.decaf.editor.MethodsBox</classname>
+			<FormLocation mode="LABEL_ON_TOP">
+				<row>20</row>
+				<column>0</column>
+			</FormLocation>
+		</CustomComponent>
+	</ClassComponents>
+	<MethodComponents>
+		<NameComponent>
+			<classname>com.bitwise.decaf.editor.DTextField</classname>
+			<FormLocation>
+				<row>0</row>
+				<column>0</column>
+			</FormLocation>
+		</NameComponent>
+		<ReturnComponent>
+			<classname>com.bitwise.decaf.editor.DTypeBox</classname>
+			<FormLocation>
+				<row>10</row>
+				<column>0</column>
+			</FormLocation>
+		</ReturnComponent>
+		<CustomComponent>
+			<classname>com.bitwise.decaf.editor.Parameters</classname>
+			<FormLocation mode="LABEL_ON_TOP">
+				<row>20</row>
+				<column>0</column>
+			</FormLocation>
+		</CustomComponent>
+	</MethodComponents>
+	<ParameterComponents>
+		<NameComponent>
+			<classname>com.bitwise.decaf.editor.DTextField</classname>
+			<FormLocation>
+				<row>0</row>
+				<column>0</column>
+			</FormLocation>
+		</NameComponent>
+		<TypeComponent>
+			<classname>com.bitwise.decaf.editor.DTypeBox</classname>
+			<FormLocation>
+				<row>10</row>
+				<column>0</column>
+			</FormLocation>
+		</TypeComponent>
+	</ParameterComponents>
+	<FieldComponents>
+		<NameComponent>
+			<classname>com.bitwise.decaf.editor.DTextField</classname>
+			<FormLocation>
+				<row>0</row>
+				<column>0</column>
+			</FormLocation>
+		</NameComponent>
+		<TypeComponent>
+			<classname>com.bitwise.decaf.editor.DTypeBox</classname>
+			<FormLocation>
+				<row>10</row>
+				<column>0</column>
+			</FormLocation>
+		</TypeComponent>
+	</FieldComponents>
+	<LocalComponents>
+		<NameComponent>
+			<classname>com.bitwise.decaf.editor.DTextField</classname>
+			<FormLocation>
+				<row>0</row>
+				<column>0</column>
+			</FormLocation>
+		</NameComponent>
+		<TypeComponent>
+			<classname>com.bitwise.decaf.editor.DTypeBox</classname>
+			<FormLocation>
+				<row>10</row>
+				<column>0</column>
+			</FormLocation>
+		</TypeComponent>
+	</LocalComponents>
+	<Grammars>
+		<Phrase>com.bitwise.decaf.editor.grammar.If</Phrase>
+		<Phrase>com.bitwise.decaf.editor.grammar.Binary</Phrase>
+		<Phrase>com.bitwise.decaf.editor.grammar.Comparison</Phrase>
+		<Phrase>com.bitwise.decaf.editor.grammar.Access</Phrase>
+		<Sentence>com.bitwise.decaf.editor.grammar.LocalVariable</Sentence>
+		<Sentence>com.bitwise.decaf.editor.grammar.If</Sentence>
+		<Sentence>com.bitwise.decaf.editor.grammar.While</Sentence>
+		<Sentence>com.bitwise.decaf.editor.grammar.Binary</Sentence>
+		<Sentence>com.bitwise.decaf.editor.grammar.Access</Sentence>
+		<Sentence>com.bitwise.decaf.editor.grammar.Report</Sentence>
+		<!--<Sentence>com.bitwise.decaf.editor.grammar.Return</Sentence>-->
+	</Grammars>
+	<TypeChooserContent>
+		<TypeCategory name="uMail">
+			<TypeItem uid="Account"/>
+			<TypeItem uid="User"/>
+			<TypeItem uid="DataDisplay"/>
+			<TypeItem uid="Folder"/>
+			<TypeItem uid="FolderMenuOption"/>
+			<TypeItem uid="FolderMenuPlugin"/>
+			<TypeItem uid="Menu"/>
+			<TypeItem uid="Plugin"/>
+			<TypeItem uid="Message"/>
+			<TypeItem uid="MessageDisplay"/>
+			<TypeItem uid="MessageInput"/>
+			<TypeItem uid="MessageMenuOption"/>
+			<TypeItem uid="Prompt"/>
+		</TypeCategory>
+		<TypeCategory name="Basic">		
+			<TypeItem uid="Number"/>
+			<TypeItem uid="True/False"/>
+			<TypeItem uid="Void"/>
+		</TypeCategory>
+		<TypeCategory name="Foundation">		
+			<TypeItem uid="Anything"/>
+			<TypeItem uid="Text"/>
+			<TypeItem uid="Date"/>
+			<TypeItem uid="List"/>
+			<TypeItem uid="ListWalk"/>
+			<TypeItem uid="ListWalk2"/>
+			<TypeItem uid="System"/>
+			<TypeItem uid="NumberClass"/>
+		</TypeCategory>
+	</TypeChooserContent>
+	<TypeDefinitions>
+
+		<!-- Expected User Methods -->
+
+		<TypeDefinition Classname="#user" uid="#none">
+			<Method name="createMessage">
+				<Discussion>
+					This method collects information from the user for a new email message.  The server 
+					has created the message for you and placed it in messageInput.getMessage().  The 
+					messageInput object also contains standard prompts for the toAddress, subject, and 
+					message body.  Feel free to customize these before using them to gather user input 
+					for the message.  Note: if there is no recipient specified, the server will not 
+					deliver the message.
+				</Discussion>
+				<Parameter type="Account" name="fromAccount">
+					This is the sender's email account.
+				</Parameter>
+				<Parameter type="MessageInput" name="messageInput">
+					This is the message input facility.  It contains prompts for each of the 
+					message components: to, subject and body.  It also contains the message
+					itself, initialized with your email address as the sender.
+				</Parameter>
+			</Method>
+			<Method name="getFolderMenu">
+				<Discussion>
+					This method assembles the folder menu, listing the messages and sub-folders of the current
+					folder, along with any context-related functions you would like to offer the user.  Typically
+					the menu needs to contain a "Delete" item.  The server will append an item "Done" that steps
+					up to the parent menu of this menu.
+				</Discussion>
+				<Parameter type="Account" name="currentAccount">
+					The account being viewed.
+				</Parameter>
+				<Parameter type="Folder" name="currentFolder">
+					The folder being viewed.
+				</Parameter>
+				<Parameter type="Menu" name="thisMenu">
+					The menu we are constructing for display.
+				</Parameter>
+			</Method>
+			<Method name="getPluginMenu">
+				<Discussion>
+					This method assembles the plugins menu, which offer the user plugin functions that run without
+					any particular context (unlike the folder menu, which operates in the context of a particular
+					mail folder).  The menu expects objects of type Plugin.
+				</Discussion>
+				<Parameter type="Account" name="currentAccount">
+					The account being accessed.
+				</Parameter>
+				<Parameter type="Menu" name="pluginMenu">
+					The plugin menu, awaiting your customized selections.
+				</Parameter>
+			</Method>
+			<Method name="exit">
+				<Discussion>
+					This method is run when the user exits the uMail application.  You might give a "goodbye" message,
+					delete items from a "Deleted Items" folder, etc.
+				</Discussion>
+				<Parameter type="Account" name="currentAccount">
+					The account being exited.
+				</Parameter>
+			</Method>
+			<Method name="displayMessage">
+				<Discussion>
+					This method displays a message to the screen, and is immediately followed by the folder menu.
+					The messageDisplay object contains the message, and facilities for displaying it to screen.
+				</Discussion>
+				<Parameter type="Account" name="currentAccount">
+					The account being viewed.
+				</Parameter>
+				<Parameter type="MessageDisplay" name="messageDisplay">
+					This object contains the message in getMessage(), and a DataDisplay facility for each field of
+					the message.  Be sure to call init() before displaying any of the message values.  The method 
+					align() will properly align the values column.
+				</Parameter>
+			</Method>
+			<Method name="sendMail">
+				<Discussion>
+					This method is run after the user has created a message, but before it is actually
+					sent.  You might want to put a copy in a "Sent Items" folder, or send a copy to the 
+					user's alternate account.  The server of course performs the actual task of sending
+					the message to its destination.
+				</Discussion>
+				<Parameter type="Account" name="currentAccount">
+					The sender's account.
+				</Parameter>
+				<Parameter type="Message" name="message">
+					The message being sent; it has already been created and contains the appropriate information, 
+					though you are free to make changes such as automated keyword replacements.
+				</Parameter>
+			</Method>
+			<Method name="receiveMail">
+				<Discussion>
+					This method runs when a message is received by an account.  It is responsible for putting 
+					the message in the user's inbox, or filing it in some other appropriate folder.  You might
+					want to delete messages under certain criteria, or perhaps notify the user in the case of
+					a particularly important arrival.
+				</Discussion>
+				<Parameter type="Account" name="currentAccount">
+					The recipient's account.
+				</Parameter>
+				<Parameter type="Message" name="message">
+					The message being received.
+				</Parameter>
+			</Method>
+			
+		</TypeDefinition>
+
+		<!-- jType`s -->
+
+		<TypeDefinition Classname="com.bitwise.umail.SWIGTYPE_p_void" uid="SwigVoid"/>
+		<TypeDefinition Classname="com.bitwise.umail.jType" uid="MenuOption"/>	
+			<!-- for now, MenuOption is the only user application of the generic jType -->
+
+		<TypeDefinition Classname="com.bitwise.umail.jAccount" uid="Account">
+			<Discussion>
+				An email account.
+			</Discussion>
+			<Method name="getRoot">
+				<Discussion>
+					Returns the top folder of the tree of email folders.
+				</Discussion>
+			</Method>
+			<Method name="log">	
+				<Discussion>
+					Write a message to the log file.  This is useful when your plugins are acting suspiciously,
+					and it is inconvenient to report information to the command line.
+				</Discussion>
+				<Parameter type="Text" name="message">
+					The message to log.
+				</Parameter> 					
+			</Method>
+			<Method name="getUser">
+				<Discussion>
+					Returns the User object that represents the user of this account.
+				</Discussion>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jAddressee" uid="User">
+			<Discussion>
+				This object describes a uMail user.  Well, actually it just contains the user's
+				email address -- but later it might contain some more useful information.
+			</Discussion>
+			<Method name="getAddress">
+				<Discussion>
+					Returns the email address of this user.
+				</Discussion>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jDataDisplay" uid="DataDisplay">
+			<Discussion>
+				This object provides facilities for displaying one field of an email message to the screen.
+				The label and value will be initialized by the MessageDisplay that contained this object;
+				you are free to change them as you see fit.
+			</Discussion>
+			<Method name="setLabel">
+				<Discussion>
+					Sets the display label.
+				</Discussion>
+				<Parameter type="Text" name="label">
+					The new label.
+				</Parameter>
+			</Method>
+			<Method name="setValue">
+				<Discussion>
+					Sets the content of this display item.
+				</Discussion>
+				<Parameter type="Text" name="value">
+					The new content.
+				</Parameter>
+			</Method>
+			<Method name="display">
+				<Discussion>
+					Displays the data to the screen.
+				</Discussion>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jFolder" uid="Folder">
+			<Discussion>
+				This is an email folder.  It contains messages and sub-folders, and includes a reference to its parent folder.
+				You may add, delete, and iterate the contained messages and sub-folders.
+			</Discussion>
+			<Method name="#init">
+				<Discussion>
+					Create a new folder with the specified name.  Avoid using "." in the name, as that character
+					is currently being used for system purposes (to delimit the creation of subfolders in 
+					the getSubFolder(Text) method).  
+				</Discussion>
+				<Parameter type="Text" name="name">
+					The name of the new folder (sans "." please).
+				</Parameter>
+			</Method>
+			<Method name="getName">
+				<Discussion>
+					Get the name of this folder.
+				</Discussion>
+			</Method>
+			<Method name="add">
+				<Discussion>
+					Add a message to this folder.  Messages are always appended to the end of the message list.
+				</Discussion>
+				<Parameter type="Message" name="message">
+					The message to add.
+				</Parameter>
+			</Method>
+			<Method name="add">
+				<Discussion>
+					Add a sub-folder to this folder.  New sub-folders are always appended to the end of the folder list.
+				</Discussion>
+				<Parameter type="Folder" name="folder">
+					The folder to add.
+				</Parameter>
+			</Method>
+			<Method name="getSubFolder">
+				<Discussion>
+					Get the sub-folder with the corresponding name, if it exists; otherwise null.  You may request sub-sub-folders 
+					by appending all the folder names together in order and delimited by a ".".  E.g., getSubFolder("Inbox.Friends.Joe")
+					returns the folder for Joe that lies within the folder Friends that lies within the inbox (speaking from 
+					the root folder, which is of course not required).
+				</Discussion>
+				<Parameter type="Text" name="name">
+					The name of the folder to get.  Delimit secondary sub-folders with a ".", e.g. "Inbox.Work.Acme".
+				</Parameter>
+			</Method>
+			<Method name="getSubFolder">
+				<Discussion>
+					Get the sub-folder with the corresponding name.  If it doesn't exist and the parameter createIfNecessary is true,
+					I'll create the folder and return it.  Otherwise, a folder not found makes for a null return.  
+					You may request sub-sub-folders by appending all the folder names together in order and delimited by 
+					a ".".  E.g., getSubFolder("News.National") returns the folder National that lies within the folder 
+					News that lies within the current folder (the folder object you're calling this method upon).
+				</Discussion>
+				<Parameter type="Text" name="name">
+					The name of the folder to get.  Delimit secondary sub-folders with a ".", e.g. "Inbox.Spam.Junk".
+				</Parameter>
+				<Parameter type="True/False" name="createIfNecessary">
+					If this parameter is true and the folder does not exist, I'll create the folder and return it.  
+				</Parameter>
+			</Method>
+			<Method name="remove">
+				<Discussion>
+					Remove the folder item with the specified index.  All the items in the folder are numbered on the same scale,
+					with messages first and sub-folders next.  So to delete the second sub-folder of a folder with 3 messages,
+					call folder.delete(5).  Or to delete the second message, call folder.delete(2).
+				</Discussion>
+				<Parameter type="Number" name="index">
+					The index of the folder item to delete.  All the items in the folder are numbered on the same scale,
+					with messages first and sub-folders next.  So to delete the first sub-folder of a folder with 7 messages,
+					call folder.delete(8).  Or to delete the fifth message, call folder.delete(5).
+				</Parameter>
+			</Method>
+			<Method name="getSize">
+				<Discussion>
+					This method returns the number of items in the folder: messages + sub-folders.
+				</Discussion>
+			</Method>
+			<Method name="getMessages">
+				<Discussion>
+					This method returns an iterator of the messages in this folder.
+				</Discussion>
+			</Method>
+			<Method name="getParent">
+				<Discussion>
+					This method returns the parent folder that contains this folder.  If this is the root folder, calling
+					root.getParent() will return null.  Watch out!
+				</Discussion>
+			</Method>
+			<Method name="getSubFolders">
+				<Discussion>
+					This method returns an iterator of all the sub-folders contained within this folder.
+				</Discussion>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jFolderMenuOption" uid="FolderMenuOption">
+			<Discussion>
+				This is a folder item in the folder menu, for use in the plugin method createFolderMenu().  Create it with the name
+				you want the user to see, and pass along the corresponding folder contents;
+				when the user selects this item, uMail will call getFolderMenu() with the folder contained in this object.
+			</Discussion>
+			<Method name="#init">
+				<Discussion>
+					Create a new FolderMenuOption, specifying its name and contents.
+				</Discussion>
+				<Parameter type="Text" name="name">
+					The name of the FolderMenuOption, as it will appear in the folder menu.
+				</Parameter>
+				<Parameter type="Folder" name="folder">
+					The folder that will be displayed when this FolderMenuOption is selected by the user; generally speaking this
+					will be a sub-folder of the folder they are currently viewing.
+				</Parameter>
+			</Method>
+			<Method name="getDisplayText" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jFolderMenuPlugin" uid="FolderMenuPlugin">
+			<Discussion>
+				This is a menu option in the folder menu, for use in the createFolderMenu() plugin method.  To add a menu item
+				to the folder menu, create an instance of this class and add it to the menu in question (which has been passed 
+				to you as a parameter to createFolderMenu()).  
+			</Discussion>
+			<Method name="#init">
+				<Discussion>
+					Create a new FolderMenuPlugin, specifying its name and folder context, and the name of the method to 
+					run when the user selects it.
+				</Discussion>
+				<Parameter type="Text" name="name">
+					The name of the menu option, as it will appear in the folder menu.
+				</Parameter>
+				<Parameter type="Folder" name="folder">
+					The folder the user is currently looking at when they select your menu option.  It will be passed along to your
+					plugin method when it is called.
+				</Parameter>
+				<Parameter type="Text" name="pluginMethodName">
+					The name of the method to call when the user selects your menu option.  The method will receive two parameters,
+					the user's Account and the Folder currently being viewed when the menu option was selected.
+				</Parameter>
+			</Method>
+			<Method name="getDisplayText" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jMenu" uid="Menu">
+			<Discussion>
+				This is a menu.  You can add menu options to it.  
+			</Discussion>
+			<Method name="append">
+				<Discussion>
+					Add a menu option to this menu.
+				</Discussion>
+				<Parameter type="MenuOption" name="newOption">
+					The menu option to add to this menu.
+				</Parameter>
+			</Method>
+			<Method name="go" hide="true"/>
+			<Method name="getSize" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jMenuOption" uid="Plugin">
+			<Discussion>
+				Plugin represents an item in the uMail plugins menu.  
+			</Discussion>
+			<Method name="#init">
+				<Discussion>
+					Create a new plugin with the specified display name and run method name.
+				</Discussion>
+				<Parameter type="Text" name="displayName">
+					The name of the plugin, as it will appear in the plugins menu.
+				</Parameter>
+				<Parameter type="Text" name="runMethodName">
+					The name of the method uMail calls when the user chooses this plugin.
+				</Parameter>
+			</Method>
+			<Method name="getDisplayText" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jMessage" uid="Message">
+			<Discussion>
+				An email message, with accessors for its fields.  If you are creating a new message, the fields from and sentTime
+				will be set for you, and the to, subject and body fields will be null.
+			</Discussion>
+			<Method name="getFrom">
+				<Discussion>
+					Get the User object that represents the message sender.  
+				</Discussion>
+			</Method>
+			<Method name="getTo">
+				<Discussion>
+					Get the User object that represents the message recipient.
+				</Discussion>
+			</Method>
+			<Method name="getSubject">
+				<Discussion>
+					Get the message subject.
+				</Discussion>
+			</Method>
+			<Method name="getBody">
+				<Discussion>
+					Get the message body text.
+				</Discussion>
+			</Method>
+			<Method name="getSentTime">
+				<Discussion>
+					Get the time at which this message was sent.
+				</Discussion>
+			</Method>
+			<Method name="setFrom">
+				<Discussion>
+					Set the sender of this message (this is automatically done by the server upon creation of a new message).
+				</Discussion>
+				<Parameter type="User" name="from">
+					The User object that represents the message recipient.
+				</Parameter>
+			</Method>
+			<Method name="setTo">
+				<Discussion>
+					Set the recipient of this message.
+				</Discussion>
+				<Parameter type="Text" name="to">
+					The email address of the recipient.
+				</Parameter>
+			</Method>
+			<Method name="setSubject">
+				<Discussion>
+					Set the subject of this message.
+				</Discussion>
+				<Parameter type="Text" name="subject">
+					The message subject.
+				</Parameter>
+			</Method>
+			<Method name="setBody">
+				<Discussion>
+					Set the body text of this message.
+				</Discussion>
+				<Parameter type="Text" name="body">
+					The message body text.
+				</Parameter>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jMessageDisplay" uid="MessageDisplay">
+			<Discussion>
+				A facility for displaying a message to the user, for use in the the plugin method displayMessage().  It contains
+				a DataDisplay object for each field of the message, and a method for aligning the display values.  The message
+				contents have already been applied to the DataDisplay objects provided, but the message is also included 
+				for any customization purposes you might have.  For example, you might want to put the message in a folder
+				called "Recently Viewed" for the user's reference.  
+			</Discussion>
+			<Method name="getFrom">
+				<Discussion>
+					Get the DataDisplay facility for the sender field.
+				</Discussion>
+			</Method>
+			<Method name="getSentTime">
+				<Discussion>
+					Get the DataDisplay facility for the message sent time.
+				</Discussion>
+			</Method>
+			<Method name="getSubject">
+				<Discussion>
+					Get the DataDisplay facility for the subject field.
+				</Discussion>
+			</Method>
+			<Method name="getBody">
+				<Discussion>
+					Get the DataDisplay facility for the body field.
+				</Discussion>
+			</Method>
+			<Method name="align">
+				<Discussion>
+					Call this method when you have finished any customizations of the DataDisplay objects.  The MessageDisplay
+					will examine all of its contained DataDisplay objects and properly align the values in a column to their right.
+				</Discussion>
+			</Method>
+			<Method name="getMessage">
+				<Discussion>
+					Get the message to be displayed.
+				</Discussion>
+			</Method>
+			<Method name="initValues" hide="true"/>
+			<Method name="delete" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jMessageInput" uid="MessageInput">
+			<Discussion>
+				A facility for gathering the contents of a new email message from the user.  It contains three prompts,
+				for the recipient's address, the subject and the message body.  It also contains the message that will be 
+				sent; the sender has already been set by uMail, and the sentTime will be applied as the message is sent.
+			</Discussion>
+			<Method name="getToPrompt">
+				<Discussion>
+					Get the prompt provided for obtaining the recipient's email address.  You may modify this prompt, or
+					use your own.
+				</Discussion>
+			</Method>
+			<Method name="getSubjectPrompt">
+				<Discussion>
+					Get the prompt provided for obtaining the message subject.  You may modify this prompt, or
+					use your own.
+				</Discussion>
+			</Method>
+			<Method name="getBodyPrompt">
+				<Discussion>
+					Get the prompt provided for obtaining the message subject.  You may modify this prompt, or
+					use your own.
+				</Discussion>
+			</Method>
+			<Method name="getMessage">
+				<Discussion>
+					Get the email message that will be sent by uMail upon completion of the createMessage() plugin method.
+					Apply the values for to, subject and body as specified by the user.  You may wish to provide convenience
+					facilities, such as replacing acronyms like IMHO with the actual intended text (to help readers like me 
+					who have no idea what that stands for).
+				</Discussion>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jMessageMenuOption" uid="MessageMenuOption">
+			<Discussion>
+				A menu option in the folder menu, representing an email message contained in that folder.
+				This class is for use in the getFolderMenu() plugin method, which is used to create the 
+				folder menu.  When the user selects this MessageMenuOption, uMail will call your displayMessage()
+				plugin method with the email message contained within this menu option.
+			</Discussion>
+			<Method name="#init">
+				<Discussion>
+					Create a MessageMenuOption with the specified display text and email message.
+				</Discussion>
+				<Parameter type="Text" name="displayText">
+					The text that will appear in the folder menu, representing this message.
+				</Parameter>
+				<Parameter type="Message" name="message">
+					The email message this option represents; it will be passed to displayMessage when the user selects
+					this menu option.
+				</Parameter>
+			</Method>
+			<Method name="getDisplayText" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jPrompt" uid="Prompt">
+			<Discussion>
+				A prompt object, with which you can ask the user a question.
+			</Discussion>
+			<Method name="#init">
+				<Discussion>
+					Create a new prompt with the specified display text and flag for content length.
+				</Discussion>
+				<Parameter type="Text" name="displayText">
+					The text with which the user will be prompted.
+				</Parameter>
+				<Parameter type="True/False" name="isAtomic">
+					A flag specifying whether this prompt expects multiple words (not atomic, such as a message body)
+					or a single word (atomic, such as a menu item).
+				</Parameter>
+			</Method>
+			<Method name="askUser">
+				<Discussion>
+					Run the prompt and returns the exact text the user typed (up to the final "." for a non-atomic prompt).
+				</Discussion>
+			</Method>
+			<Method name="askUser" hide="true">
+				<Parameter type="Text" name="defaultResponse"/>
+			</Method>
+			<Method name="#init" hide="true">
+				<Parameter type="SwigVoid"/>
+			</Method>
+			<Method name="delete" hide="true"/>
+		</TypeDefinition>
+		
+		<!-- Primitives -->
+		
+		<TypeDefinition Classname="void" uid="Void">
+			<Discussion>
+				This is used in place of a return value for methods that don't return anything.
+			</Discussion>
+		</TypeDefinition>
+		<TypeDefinition Classname="int" uid="Number">
+			<Discussion>
+				A number; not an object, so there are no methods.
+			</Discussion>
+		</TypeDefinition>
+		<TypeDefinition Classname="boolean" uid="True/False">
+			<Discussion>
+				A true or false value.  It is used mainly in loops and if statements to determine 
+				which way the code will go in the current context.
+			</Discussion>
+		</TypeDefinition>
+		<TypeDefinition Classname="byte" uid="byte"/>
+		
+		<!-- <TypeDefinition Classname="char" uid="Character"/> -->
+
+		<!-- Standard JDK Types -->
+
+		<TypeDefinition Classname="java.lang.Object" uid="Anything">
+			<Discussion>
+				This is a generic type for any object, and it is also the lowest common denominator for
+				anything except a Number and a True/False (which are plain data and have no structure).
+			</Discussion>
+			<Method name="getClass">
+				<Discussion>
+					This method returns the Class of the 'anything' being referred to.  Use it when
+					you're not sure what kind of object you've got, and you need to know.  
+				</Discussion>
+			</Method>
+		</TypeDefinition>
+		<TypeDefinition Classname="java.lang.String" uid="Text" declaredMethods="DETAILED">
+			<Discussion>
+				A text object, with many useful methods.
+			</Discussion>
+			<Field name="CASE_INSENSITIVE_ORDER" hide="true"/>
+			<Method name="#init" hide="true">
+				<Parameter type="byte" dimensions="1"/>
+			</Method>
+			<Method name="compareTo">
+				<Discussion>
+					Compare the text contents with those of another text object.  The return value is
+					a number, which is only distinguised as &lt;0, 0, or &gt;0.  A result &lt;0 means that 
+					'other' would appear later in an alphabetically sorted list than does this text; &lt;0 means 
+					'other' would appear earlier; and 0 means that the text is exactly the same.  Criteria
+					for alphabetic sorting are (in priority order): uppercase first, a-z ascending, then 
+					shortest first.
+				</Discussion>
+				<Parameter type="Text" name="other">
+					The other text object, with which this one will be compared.
+				</Parameter>
+			</Method>
+			<Method name="equals">
+				<Discussion>
+					Returns true if the Text object "other" exactly matches this Text object in a case-sensitive comparison.
+				</Discussion>
+				<Parameter type="Anything" name="other">
+					The other Text object to compare this one with.  While it's listed as any object, in reality
+					you can only compare this Text object with another text object.  (This is because all objects
+					have an "equals" method, so the parameter must be completely generic... but don't worry about that).
+				</Parameter>
+			</Method>
+			<Method name="equalsIgnoreCase">
+				<Discussion>
+					Returns true if the Text object "other" matches this Text object in a case-insensitive comparison.
+				</Discussion>
+				<Parameter type="Text" name="other">
+					The other Text object to compare this one with.
+				</Parameter>
+			</Method>
+			<Method name="endsWith">
+				<Discussion>
+					Returns true if the Text object "other" appears at the end of this Text object, matching case-sensitive.  
+				</Discussion>
+				<Parameter type="Text" name="other">
+					A Text object representing the text we are looking for at the end of this Text object.
+				</Parameter>
+			</Method>
+			<Method name="startsWith">
+				<Discussion>
+					Returns true if the Text object "other" appears at the beginning of this Text object, matching case-sensitive.  
+				</Discussion>
+				<Parameter type="Text" name="other">
+					A Text object representing the text we are looking for at the beginning of this Text object.
+				</Parameter>
+			</Method>
+			<Method name="indexOf">
+				<Discussion>
+					Returns the index (counting from 0) in this Text object at which the first occurrence of "other" is found; 
+					or returns -1 if "other" is not found in this Text object.
+				</Discussion>
+				<Parameter type="Text" name="other">
+					A Text object representing the text we are looking for in this Text object.
+				</Parameter>
+			</Method>
+			<Method name="indexOf">
+				<Discussion>
+					Starts at "startIndex" (counting from 0) in this Text object and scans the remainder of the text:
+					returns the index at which the next occurrence of "other" is found; 
+					or returns -1 if "other" is not found beyond "startIndex" in this Text object.
+				</Discussion>
+				<Parameter type="Text" name="other">
+					A Text object representing the text we are looking for in this Text object.
+				</Parameter>
+				<Parameter type="Number" name="startIndex">
+					The index at which to start looking in this Text object for "other".
+				</Parameter>
+			</Method>
+			<Method name="matches">
+				<Discussion>
+					Returns true if the regular expression "pattern" is found in this Text object.  Regular expressions allow
+					a large variety of wildcard characters and other symbolic pattern references, so that you can match
+					text to abstract patterns or allow certain flexibilities in your matching criteria.
+				</Discussion>
+				<Parameter type="Text" name="pattern">
+					A Text object representing the text we are looking for in this Text object.
+				</Parameter>
+			</Method>
+			<Method name="substring">
+				<Discussion>
+					Returns a segment of this Text object, starting from "startIndex" and continuing to the end.  This will 
+					include the character at "startIndex"; e.g., calling substring(7) on the Text object "obtemperatio"
+					returns "ratio".  Note that Text indices start at 0.
+				</Discussion>
+				<Parameter type="Number" name="startIndex">
+					The index (counting from 0) at which the substring starts.
+				</Parameter>
+			</Method>
+			<Method name="substring">
+				<Discussion>
+					Returns a segment of this Text object, starting from "startIndex" and continuing to "endIndex".  This will
+					include the character at "startIndex", but will exclude the character at "endIndex"; e.g., calling
+					substring(2, 8) on the Text object "obtemperatio" returns "temper".  If you find this confusing (I always do),
+					choose a start index and count the number of characters you want from there; add that number to your start index
+					to get your end index.  Note tha Text indices start at 0.
+				</Discussion>
+				<Parameter type="Number" name="startIndex">
+					The index (counting from 0) at which the substring starts.
+				</Parameter>
+				<Parameter type="Number" name="endIndex">
+					The index (counting from 0) at which the substring ends (this character will be excluded).
+				</Parameter>
+			</Method>
+			<Method name="toLowerCase">
+				<Discussion>
+					Returns the contents of this Text object, with all the upper case letters changed to lower case.
+					Symbols and whitespace remain unchanged.
+				</Discussion>
+			</Method>
+			<Method name="toUpperCase">
+				<Discussion>
+					Returns the contents of this Text object, with all the lower case letters changed to upper case.
+					Symbols and whitespace remain unchanged.
+				</Discussion>
+			</Method>
+			<Method name="valueOf">
+				<Discussion>
+					Returns a text representation of "number".
+				</Discussion>
+				<Parameter type="Number" name="number">
+					The number to represent in text.
+				</Parameter>
+			</Method>
+			<Method name="valueOf">
+				<Discussion>
+					Returns a text representation of "tf": it will be "true" or "false".
+				</Discussion>
+				<Parameter type="True/False" name="tf">
+					The True/False value to represent in text.
+				</Parameter>
+			</Method>
+		</TypeDefinition>
+		<TypeDefinition Classname="com.bitwise.umail.jTime" uid="Date" declaredMethods="DETAILED">
+			<Method name="#init"/>
+			<Method name="before">
+				<Discussion>
+					Returns true if the Date "other" represents a date and time earlier than does this Date object.
+				</Discussion>
+				<Parameter type="Anything" name="other">
+					The Date to compare this Date object with; "other" must be some subclass of Date, though it doesn't say so.
+				</Parameter>
+			</Method>
+			<Method name="after">
+				<Discussion>
+					Returns true if the Date "other" represents a date and time later than does this Date object.
+				</Discussion>
+				<Parameter type="Anything" name="other">
+					The Date to compare this Date object with; "other" must be some subclass of Date, though it doesn't say so.
+				</Parameter>
+			</Method>
+			<Method name="format"/>
+			<Method name="getDay"/>
+			<Method name="getMonth"/>
+			<Method name="getYear"/>
+			<Method name="getHour"/>
+			<Method name="getMinute"/>
+			<Method name="getSecond"/>
+		</TypeDefinition>
+		<TypeDefinition Classname="java.lang.Integer" uid="NumberClass" declaredMethods="DETAILED">
+			<Method name="parseInt">
+				<Discussion>
+					If "numberText" can be understood as a number, this method returns that number.  Otherwise it spits up
+					a NumberFormatException, which will cause your plugin to end on the spot.  In a later version of Decaf,
+					there will be a simple facility to catch this exception before it gets away, so that you choose an 
+					alternative course of action.  For now this is a nuisance, especially because the number recognizing process 
+					is not lenient at all: any non-numeric characters will cause this NumberFormatException to be thrown.
+				</Discussion>
+				<Parameter type="Text" name="numberText">
+					A Text object whose contents (hopefully) represent a number.
+				</Parameter>
+			</Method>
+		</TypeDefinition>
+		<TypeDefinition Classname="java.util.Vector" uid="List">
+			<Discussion>
+				The List object is fairly self explanatory, but please note that indices always start from 0,
+				and ranges of indices include the element at the start of the range, but exclude the element 
+				at the end (so the quantity in the range is the end index minus the start index).
+				Also, there's trouble when an index out of range is used (i.e., larger than the last index
+				of the List, or less than zero).
+			</Discussion>
+		</TypeDefinition>
+		<TypeDefinition Classname="java.util.Iterator" uid="ListWalk"/>
+		<TypeDefinition Classname="com.bitwise.umail.uIterator" uid="ListWalk2"/> 
+		<TypeDefinition Classname="java.lang.System" uid="System"/>
+		<!-- <TypeDefinition Classname="java.lang.Thread" uid="Thread"/> -->
+	</TypeDefinitions>
+</EditorConfig>

@@ -1,0 +1,20 @@
+<body>
+This package contains the user interface foundation for the contents
+of method bodies.  To avoid confusion with the base package {@link org.hs.generator},
+I've chosen the aliases {@link Phrase} for Expression, {@link Sentence} for Statement, and
+{@link Paragraph} for Block.  This package adds one layer to the source tree of
+a typical {@link GSourceFile}: each node contained in a method {@link GMethod.body} is wrapped in 
+one of the aforementioned aliases, which act as placeholders for the code
+structure as constructs are created, modified and removed.  These aliases
+extend the abstract base class {@link CodeNode}, and they each route the code 
+generation calls encodeExpression() and encodeStatement() to the {@link GConstruct}
+they contain.  Code constructs should always be displayed in their 
+respective components {@link PhraseBox}, and {@link ParagraphBox}.  The 
+{@link Grammar} constructs Phrase and Sentence are equipped to be monitored by 
+{@link Officer} instances, which validate code correctness as it is entered.  When
+an {@link EnforcementOfficer} (subclass of Officer) finds error in a grammar, it sets 
+that grammar's 'blue' property
+to true, which automatically places the offending line into the 
+{@link Blues Review}, available for the user's analysis 
+when they are ready.  
+</body>

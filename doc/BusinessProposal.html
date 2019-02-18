@@ -1,0 +1,116 @@
+
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>The Business Proposal</h2>
+I am seeking an established software development company to assist me in the completion 
+of the Decaf project.  Ideally, this company will have an immediate application for the 
+Decaf editor and its plugins.  The details of the arrangment are flexible; please consider
+the following.
+<p>
+<dir>
+<li>Formal agreement to purchase a redistribution license of Decaf upon its initial release.
+<li>Formal partnership tasked with the distribution of Decaf and its integration into other
+companies' applications on a consulting basis.  There is potential for a vertical market here.
+<li>Arrangement of sponsorship for my continued development of Decaf for release under the
+<a href="http://www.gnu.org/licenses/lgpl.html">Library Gnu Public License</a>.
+</dir> 
+Please also consider any modifications to and combinations of the above terms, and feel free to 
+suggest any that would be agreeable to your company.  Simply put, I am open to any options that 
+are compatible with my priorities for the project, as follows.
+<p>
+<dir>
+<li>Create the very nicest product in Decaf, making it fun and well appreciated by as many of 
+its users as possible.
+<li>Establish Decaf Java internationally as the primary programming tool for the "non-programmer".
+<li>Maintain either partial ownership of Decaf, or royalty rights to its distribution (unless
+arrangements are made for its distribution under the LGPL).
+</dir>
+<p>
+<a name="WorkRemaining"/><h3>Work Remaining</h3>
+Decaf requires the following structural modifications for a promotion to <a href="Glossary.html#alpha">alpha</a> 
+status.  When Decaf reaches the alpha stage, all further development will interstingly fall under the category of
+customization.  The process of filling out the editor and type chooser with a full complement of language
+constructs and <a href="Glossary.html#JavaAPI">Java API</a> classes must be done on the basis of the needs
+of a specific group of users.  It is for this reason that I approach your business with the Decaf project
+at such an early stage of development.  In a matter of three or four months, I will begin to implement 
+customer-specific features.  So I am asking you to decide now whether you would like your customer base to 
+be included in my initial implementation list when that time arrives.
+
+<dir>
+<li>Decaf is currently integrated into the open-source Java compiler <a href="Glossary.html#KJC">KJC</a>, which
+	must be replaced for the following reasons:
+<dir>
+	<li>KJC is distributed under the GNU General Public License, which of course affects my 
+		<a href="#License">license options</a>.
+	<li>Built as a command-line compiler, KJC is not structurally suited for compilation of 
+		code constructs generated in realtime.  <br>
+</dir>
+	More suitable compilers with commercially compatible open-source licenses have been identified.<p>
+<li>I plan to extend the internal compiler's rule checking classes such that:
+<dir>
+	<li>They can be thrown as exceptions into the Decaf editor 
+	<li>Each is equipped to display a configurable, user-level explanation of the compile error
+</dir><p>
+<li>Some Java language features need a home in the Decaf editor framework, including:
+<dir>
+	<li>Facilities for the display and correlation of multiple user-defined classes 
+	<li>Recognition of a single class' implementation of multiple interfaces in the 
+		<a href="DecafUserGuide.html#TypeChooser">TypeChooser</a>
+</dir><p>
+<li>The object model within the Decaf user interface is not presently cohesive, nor can it be until
+	some of the above features are implemented.  Once accomplished, the scope of this object model will 
+	become concisely definable, and the task of completing its design will be simple.<p>
+<li>Decaf needs a special classloader that watches directories of user plugins for modification and 
+	automatically reloads each new compilation as it arrives on disk.<p>
+<li>A visual tool for the construction of dialogs will be very important for novice Decaf users.  While I 
+	have yet to design the tool, I imagine it will be a combination of <a href="api/org/hs/jfc/HotComponent.html">
+	HotComponent</a> and a layout manager such as <a href="jdk/api/javax/swing/SpringLayout.html">SpringLayout</a>.<p>
+<li>A class import feature will be added to the <a href="DecafUserGuide.html#TypeChooser">Type Chooser</a> such that
+	it will allow the user to import any Java class they would like to incorporate into their project.  <p>
+<li>Decaf currently stores its .cup files using Java's <a href="jdk/api/java/io/Serializable.html">Serialization</a>
+	mechanism, which produces enormous files, and is exceedingly fragile: it refuses to open a particular file if any of the 
+	class definitions for objects in the file have been modified since the file was stored.  There are some small 
+	leniencies to this problem, but Decaf really must have its own binary file format. 
+</dir>
+<p>
+
+<a name="License"/><h3>License</h3>
+You may have noticed that this prototype is covered by the very restrictive 
+<a href="License.html">GNU Public License</a>, which does not allow this Decaf prototype or
+any descendant of it to be integrated into or used by a commercial application.  Future versions 
+of Decaf will be sold commercially under a different license.  My reasons for temporarily using 
+the GPL are:
+<p>
+<dir>
+<li>To allow myself to distribute the complete source code of the prototype, for potential 
+partner companies' review, without jeopardizing my rights to it.<br>
+<li>To allow this prototype of Decaf to be developed and integrated into GPL products. <br>
+<li>To maintain an obligation to compiler <a href="Glossary.html#KJC">KJC</a>, which Decaf uses 
+to generate .java source files and byte code.  KJC is covered under the GPL, and therefore this version
+of Decaf must also be.  I have identified other compilers bearing more lenient, commercially
+compatible licenses; these compilers are also of much higher quality.  It will be a simple (but 
+laborious) task to integrate one of these compilers into Decaf.
+</dir>
+
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+
+</body>

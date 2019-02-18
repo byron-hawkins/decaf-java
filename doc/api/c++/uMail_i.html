@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../decaf/com/bitwise/umail/uMail.i</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>// File : uMail.i 
+</font>
+
+%module uMail
+
+
+%{
+<font color=#0000FF>#include</font> <font color=#FF0000>"../../../native/template.h"</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>"../../../../umail/jMail.h"</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>"../../../../umail/util.h"</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>"../../../native/plugin.h"</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>"time.h"</font>
+%}
+
+
+<font color=#9A1900>// <a name="jMessageDisplay"/>
+</font><font color=#9A1900>// ********** jMessageDisplay *********** //
+</font>%typemap(javacode) jMessageDisplay
+%{
+  <font color=#0000FF>public</font> <font color=#009900>void</font> init()
+  {
+      <font color=#0000FF>this</font>.initValues();
+      jTime sentTime = <font color=#0000FF>this</font>.getMessage().getSentTime();
+      sentTime.init();
+      <font color=#0000FF>this</font>.getSentTime().setValue(sentTime.format());
+  }
+%}
+
+
+
+<font color=#9A1900>// <a name="jPluginLib"/>
+</font><font color=#9A1900>// ********** jPluginLib *********** //
+</font>%typemap(javacode) jPluginLib
+%{
+  <font color=#0000FF>static</font>
+  {
+    System.loadLibrary(<font color=#FF0000>"jMail"</font>);
+  }
+%}
+
+
+<font color=#9A1900>// <a name="jHandle"/>
+</font><font color=#9A1900>// ********** jHandle *********** //
+</font>%typemap(javaimports) jHandle
+%{
+import java.util.Iterator;
+%}
+
+%typemap(javacode) jHandle
+%{
+  <font color=#0000FF>public</font> String toString()
+  {
+      StringBuffer buffer = <font color=#0000FF>new</font> StringBuffer();
+      buffer.append(<font color=#0000FF>this</font>.getMethodName());
+      buffer.append(<font color=#FF0000>"("</font>);
+      
+      Iterator parameters = <font color=#0000FF>this</font>.getParameterTypes();
+      <font color=#0000FF>while</font> (parameters.hasNext())
+      {
+          buffer.append(parameters.next().toString());
+    }
+    buffer.append(<font color=#FF0000>")"</font>);
+    <font color=#0000FF>return</font> buffer.toString();
+  }
+%}
+
+
+
+<font color=#9A1900>// <a name="uIterator"/>
+</font><font color=#9A1900>// ********** uIterator *********** //
+</font>%typemap(javainterfaces) uIterator <font color=#FF0000>"java.util.Iterator"</font>
+
+<font color=#0000FF>class</font> uIterator
+{
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>virtual</font> <font color=#009900>bool</font> hasNext() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> jobject next() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> <font color=#009900>void</font>* getNext() = <font color=#CC33CC>0</font>;
+    <font color=#009900>void</font> remove();
+};
+
+<font color=#0000FF>class</font> jString 
+{
+<font color=#0000FF>public</font>:
+    <font color=#009900>char</font>* get();
+};
+
+<font color=#0000FF>class</font> jHandle
+{
+<font color=#0000FF>public</font>:
+    jHandle();
+    <font color=#009900>char</font>* getMethodName();
+    <font color=#009900>char</font>* getPluginName();
+    <font color=#009900>char</font>* getDescription();
+    uIterator* getParameterTypes();
+    <font color=#009900>void</font> setPluginName(<font color=#009900>char</font>* n);
+};
+
+<font color=#0000FF>class</font> jType
+{
+<font color=#0000FF>public</font>:
+    <font color=#009900>char</font>* unqualifiedName();
+    <font color=#009900>void</font>* getContent();
+};
+
+
+<font color=#9A1900>// <a name="jTime"/>
+</font><font color=#9A1900>// ********** jTime *********** //
+</font>%typemap(javaimports) jTime
+%{
+import java.text.*;
+%}
+
+%typemap(javabase) jTime <font color=#FF0000>"java.util.GregorianCalendar"</font>
+
+%typemap(javacode) jTime
+%{
+  <font color=#0000FF>public</font> <font color=#009900>void</font> init()
+  {
+    super.set(<font color=#0000FF>this</font>.getYear() + <font color=#CC33CC>1900</font>, <font color=#0000FF>this</font>.getMonth(), <font color=#0000FF>this</font>.getDay(), <font color=#0000FF>this</font>.getHour(), <font color=#0000FF>this</font>.getMinute(), <font color=#0000FF>this</font>.getSecond());
+  }
+  
+  <font color=#0000FF>protected</font> <font color=#0000FF>static</font> final DateFormat s_format = <font color=#0000FF>new</font> SimpleDateFormat(<font color=#FF0000>"MM/dd/yyyy hh:mm"</font>);
+  
+  <font color=#0000FF>public</font> String format()
+  {
+      <font color=#0000FF>return</font> s_format.format(<font color=#0000FF>this</font>.getTime());
+  }
+%}
+
+<font color=#0000FF>class</font> jTime 
+{
+<font color=#0000FF>public</font>:
+    <font color=#009900>int</font> getSecond();
+    <font color=#009900>int</font> getMinute();
+    <font color=#009900>int</font> getHour();
+    <font color=#009900>int</font> getDay();
+    <font color=#009900>int</font> getMonth();
+    <font color=#009900>int</font> getYear();
+    <font color=#009900>bool</font> isDST();
+};
+
+
+
+<font color=#9A1900>// <a name="jPluginLib"/>
+</font><font color=#9A1900>// ********** jPluginLib *********** //
+</font><font color=#0000FF>class</font> jPluginLib
+{
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>static</font> <font color=#009900>void</font> init(<font color=#009900>void</font>* lib);
+    <font color=#0000FF>static</font> <font color=#009900>void</font> log(<font color=#009900>char</font>* message);
+    <font color=#0000FF>static</font> <font color=#0000FF>const</font> <font color=#009900>char</font>* getClasspath();
+};
+
+
+
+<font color=#9A1900>// <a name="jMessage"/>
+</font><font color=#9A1900>// ************ jMessage *********** //
+</font>%typemap(javacode) jMessage
+%{
+  <font color=#0000FF>public</font> jTime getSentTime() {
+      jTime time = <font color=#0000FF>new</font> jTime(uMailJNI.jMessage__getSentTime(swigCPtr), <font color=#0000FF>false</font>);
+      time.init();
+      <font color=#0000FF>return</font> time;
+  }
+%}
+
+
+<font color=#0000FF>class</font> jMessage : <font color=#0000FF>public</font> jType
+{
+<font color=#0000FF>public</font>:
+    jMessage(<font color=#009900>void</font>* m);
+    
+    jAddressee* getFrom();
+    jAddressee* getTo();
+    <font color=#009900>char</font>* getSubject();
+    <font color=#009900>char</font>* getBody();
+    
+    <font color=#009900>void</font> setTo(<font color=#009900>char</font>* address);
+    <font color=#009900>void</font> setSubject(<font color=#009900>char</font>* subject);
+    <font color=#009900>void</font> setBody(<font color=#009900>char</font>* body);
+
+    jTime* _getSentTime();
+};
+
+%import <font color=#FF0000>"../../../native/plugin.h"</font>
+%include <font color=#FF0000>"../../../../umail/jMail.h"</font>
+
+
+<font color=#0000FF>class</font> List
+{
+<font color=#0000FF>private</font>:
+    <font color=#009900>int</font> size;
+    Node* first;
+    Node* last;
+<font color=#0000FF>public</font>:
+    List();
+    <font color=#009900>void</font> append(<font color=#009900>void</font>* addMe);
+    <font color=#009900>int</font> getSize();
+<font color=#9A1900>//    bool contains(Comparable* c);
+</font>    ListIterator* iterator();
+    <font color=#009900>void</font> shrink();
+};
+
+
+<font color=#9A1900>/*
+// <a name="ListIterator"/>
+class ListIterator : public uIterator
+{
+private:
+    Node* current;
+public:
+    //ListIterator(Node* first);
+    bool hasNext();
+    jobject next();
+    void* getNext();
+    void remove();
+};
+*/</font>
+
+<font color=#9A1900>// <a name="jVector"/>
+</font><font color=#0000FF>class</font> jVector 
+{
+<font color=#0000FF>public</font>:
+    jVector();
+    jobject get(<font color=#009900>int</font> index);
+    <font color=#009900>void</font> set(<font color=#009900>int</font> index, jobject value);
+    <font color=#009900>void</font> add(jobject value);
+    <font color=#009900>void</font> remove(<font color=#009900>int</font> index);
+    <font color=#009900>int</font> getSize();                   
+    uIterator* iterator();
+};
+
+
+</tt>
+</pre>
+</body>
+</html>
+<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>

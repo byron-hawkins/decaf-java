@@ -1,0 +1,246 @@
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>Decaf Tutorial</h2>
+
+This tutorial gives detailed instructions for writing code with the Decaf editor.  For a basic list and description of
+editor operations, please see the <a href="DecafUserGuide.html">user's guide</a>.  Note the convention in this 
+document of representing references to words displayed in the Decaf editor (i.e., window titles, labels, menu items and box
+contents) in <b>bold</b>.  This tutorial is presented in three consecutive steps; feel free to begin at any one of them.
+<dir>
+<li><a href="#Exploring">Exploring</a>
+<li><a href="#Experimentation">Experimentation</a>
+<li><a href="#Example">Example</a>
+</dir>
+The plugin methods that result from these exercises can be found in <b>uMailPlugins_examples.cup</b>.  But do try the 
+exercises yourself, they provide the best way to learn the details and experience of the Decaf editor.
+
+<a name="Exploring"/><h3>Exploring</h3>
+
+Let's explore the Decaf editor by looking around at some methods that have already been created.  If you're interested in 
+writing some code, please consider the <a href="#Experimentation">experimentation</a> exercise below.
+<dir>
+<li>Start uMail by typing its name at a command prompt in the directory decaf_demo/umail, and log in with your first name.
+<li>Enter '2e' to edit <b>uMailPlugins</b> (it will take a while for the editor to open the first time around -- sorry).
+<li>You should now be looking at the <b>Class Editor</b>, which contains the <b>Name</b> of the class, along with its
+<b>Fields</b> and <b>Methods</b>.
+<li>Double-click on any of the methods in the <b>Methods</b> list box of the <b>Class Editor</b>; a <b>Method Editor</b>
+should pop up on the left containing the <b>Name</b>, <b>Return Type</b>, <b>Parameters</b> and <b>Body</b> of the method.
+<li>From here, you can examine the contents of any <a href="Glossary.html#token">token</a> by double-clicking it.
+<li>When you've had a good look around, close any open <b>Method Editor</b>s and <b>Code Editor</b>s, and open the 
+method <b>getFolderMenu</b>.
+<li>Edit the line that reads <b>While (messages.hasNext())</b>
+<li>Right-click in the <b>Do</b> listbox, and examine the popup menu that appears.  This is the 
+<a href="DecafUserGuide.html#GrammarMenu">grammar menu</a>; it contains all the choices for statements (a kind of 
+grammar) that can be placed in this box.  There should be a red line in the <b>Do</b> listbox indicating the insertion point.  
+<li>For now, click away from the menu so it disappears.  The second line in the <b>Do</b> listbox is an example of an assignment 
+statement.  It was created with the grammar menu item <b>Assignment and Arithmetic</b>.  
+<li>Double-click the assignment (which should read <b>m=messages.next()</b>) to edit it
+<li>You should see a <b>Code Editor</b> with an expression (the other kind of grammar) on the left reading <b>m</b>,
+and an expression on the right reading <b>messages.next()</b>.  
+<li>Look in the <b>Code Editor</b> of the <b>While</b> loop and notice the first line, which reads <b>Message m</b>.
+The <b>m</b> in the assignment statement is a reference to this <b>Message m</b> in the <b>Do</b> listbox of the <b>While</b>
+loop.
+<li>Let's see how this association was made.  Alt--left-click on the line <b>Message m</b> (in the <b>Do</b> listbox of 
+the <b>While</b> loop).  It should turn red, and the mouse cursor should turn pink.  You have <a href="DecafUserGuide.html#HotPick">
+hot-selected</a> the declaration of the variable <b>m</b>.
+<li>Move the mouse over the assignment expression's <b>Code Editor</b>, and see how the two boxes outline in red as you mouse
+over them.  They are
+telling you that you may drop the variable <b>m</b> in either location.  
+<li>Move the mouse over the box marked <b>While</b> in the previous <b>Code Editor</b>, and see how the box does <u>not</u>
+outline in red.  It is telling you that you may not drop the variable <b>m</b> there.  There are two rules that are being
+enforced in this particular situation:
+<dir>
+<li>The variable <b>m</b> in <i>out of scope</i>, because it is declared <i>later</i> in the code path than the 
+<b>While</b> expression.  For this reason, the variable <b>m</b> does not exist at the time the processor is executing
+the <b>While</b> part of the while loop (at least not the first time around).  So how could there be any reference to it?
+<li>The <b>While</b> expression of a while loop must evaluate to a boolean expression (represented in this configuration
+of Decaf as a <b>True/False</b>).  The variable <b>m</b> is of type <b>Message</b>, which is decidedly not a boolean; it has
+no meaning at this location.  
+For more information on Java data types, visit the section dedicated to them in the 
+<a href="http://java.sun.com/docs/books/tutorial/java/nutsandbolts/variables.html">Java Tutorial</a>.
+</dir>
+<li>Alt--right-click over the left box (containing <b>m</b>), and see that the cursor returns to its normal color, and the 
+highlight around the box disappears.  You have hot-dropped the variable <b>m</b> into the left (receiving) side of the
+assignment statement.  Well, it was already there; but if you like, right-click on the left box, choose <b>Clear</b> from 
+the grammar menu, and repeat this and the previous step to see how the variable <b>m</b> properly arrives in the box.
+</dir>
+
+<a name="Experimentation"/><h3>Experimentation : Creating a method</h3>
+
+Let's experiment with the Decaf editor by creating a method that displays the name of a folder.  It won't be called by 
+anything, and it won't be attached to uMail; it's just for practice.  If you're interested in a more productive exercies, 
+please consider the <a href="#Example">example</a> below.
+<dir>
+<li>Start uMail by typing its name at a command prompt in the directory decaf_demo/umail, and log in with your first name.
+<li>Enter '2e' to edit <b>uMailPlugins</b> 
+<li>Click the <b>New</b> button below the <b>Methods</b> listbox.  An empty <b>Method Editor</b> should appear to the left.
+<li>Give it the name <b>displayFolderName</b> by typing that in the <b>Name</b> field.
+<li>Click the <b>New</b> button below the <b>Parameters</b> listbox to create a new <b>Parameter</b>.
+<li>Name it <b>folder</b>.
+<li>Press ctrl-T to open the <a href="DecafUserGuide.html#TypeChooser">Type Chooser</a>, and alt--left-click on the 
+node labeled <b>Folder</b> (that is to say, hot-select it).
+<li>Move the mouse over the <b>Type</b> field in the <b>Variable Editor</b> and alt--right-click in it (that is to say,
+hot-drop the type <b>Folder</b> on it).  <b>Folder</b> should now appear as the <b>Type</b> of the variable.  Click
+<b>Ok</b> to close the <b>Variable Editor</b>.
+<li>Right-click in the <b>Body</b> listbox of the <b>Method Editor</b>, and choose <b>Report to Command Line</b>.  A
+<b>Code Editor</b> should pop up.
+<li>In the box that currently reads <b>&lt;none&gt;</b>, right-click and choose <b>Class Member</b>.  We are going to call
+a method on the <b>folder</b> parameter (a method being a kind of class member).
+<li>Hot-select the <b>folder</b> parameter from its home in the <b>Parameters</b> listbox in the <b>Method Editor</b>,
+and hot-drop it on the <b>Recipient</b> box of the class member's <b>Code Editor</b>.  Notice that the contents of the 
+<b>Member</b> listbox suddenly change: they now represent the methods of a <b>Folder</b>, since that has become the 
+new recipient of this <i>member access expression</i> (to use the formal compiler term).
+<li>Select the method <b>getName</b> in the <b>Member</b> listbox, and <b>Ok</b> the <b>Code Editor</b> away.  Notice that
+the <b>Report to Command Line</b>'s <b>Code Editor</b> now contains an expression that reads <b>folder.getName()</b>.  
+<b>Ok</b> this <b>Code Editor</b> away also.
+<li>The <br>Body</b> of the <b>Method Editor</b> now contains a statement that reads <b>report(folder.getName())</b>.  We can now print the 
+name of a folder by calling this method.  Keep this method around, it might come in handy later on.
+<li>Close the <b>Method Editor</b> and click <b>Save</b>, then <b>Compile</b>.  A code window pops up containing a lot
+of Java code.  Java programmers type this kind of code directly into a text editor, and run a compiler on the resulting
+text file to generate their programs.  It can be much faster to type code in directly in this way, but it leaves you 
+responsible for maintaining the entire Java rule set on your own, which numbers in the thousands (it is fully detailed
+in the <a href="http://java.sun.com/docs/books/jls/second_edition/html/jTOC.doc.html">Java Language Specification</a>).  
+</dir>
+
+<a name="Example"/><h3>Example : Creating a folder menu item</h3>
+Let's try adding a menu item to the uMail folder menu that will show the user where in the tree of folders the current
+folder resides.  Start uMail by typing its name in the decaf_demo/umail directory, and login with your first name.  
+Edit the plugin for viewing mail by entering '2e' at the main menu. <p>
+<b>Adding the new menu item</b><br>
+<dir>
+<li>In the <b>methods</b> listbox, double-click the method named "getFolderMenu"; it should pop open to the left.  
+The last line in the <b>Body</b> listbox of this method reads "thisMenu.append(new FolderMenuPlugin..."; we want to add 
+another line just like this one.  
+<li>Right-click below the last entry in the <b>Body</b> listbox, and choose <b>Class Member</b> from the 
+popup <a href="DecafUserGuide.html#GrammarMenu">grammar menu</a>.  A <b>Code Editor</b> window pops up that shows all the class members
+of this plugin.
+<li>Notice the term <i>this</i> in the <b>Recipient</b> box; the <b>Code Editor</b> is preparing
+to call a method on the plugin.  Let's instead call a method on the folder menu.  In the <b>Parameters</b> box of the 
+<b>Method Editor</b>, Alt--left-click the line that reads "Menu thisMenu".  It should turn red, indicating that the 
+current folder has been <a href="DecafUserGuide.html#HotPick">hot selected</a>.  
+<li>Click the <b>Code Editor</b> back into focus and Alt--right-click on the <b>Recipient</b> box.  The term <b>thisMenu</b>
+should now appear in the box, and the list of <b>Member</b>s should show the single method <b>append</b> that is available
+to be called on the folder menu.  
+<li>Select <b>append</b> in the <b>Member</b> listbox, and a parameter slot for <b>newOption</b> should appear at the bottom
+of the <b>Code Editor</b>.
+<li>Right-click in the <b>newOption</b> box and select <b>Class Member</b>.
+<li>Press ctrl-T to open the TypeChooser, hot-select the node in the tree labeled <b>FolderMenuPlugin</b> (with Alt--left-click),
+and hot-drop it on the <b>Recipient</b> box of the new <b>Code Editor</b> (in place of the <b>this</b> it currently contains).
+<li>Select <b>new FolderMenuPlugin</b> in the <b>Member</b> listbox.
+<li>Double-click in the <b>name</b> parameter's box and type <b>Where am I?</b>.  This is the name of the new menu item that
+will show up in uMail's folder menu.
+<li>In the <b>Method Editor</b>, hot-select <b>currentFolder</b> from its <b>Parameters</b> listbox, and hot-drop it on the 
+<b>folder</b> parameter of our method call to <b>new FolderMenuPlugin</b>.
+<li>Double-click in the <b>pluginMethodName</b> parameter's box and type <b>whereAmI</b>
+<li>Click <b>Ok</b> in each <b>Code Editor</b> and the <b>Method Editor</b> to close them.
+</dir>
+All this point-and-click may seem like a nuisance if you're trying this for the first time.  Please be patient, it does
+become more comfortable after a while.  <p>
+<b>Making the new menu item work</b>
+<dir>
+<li>In the <b>Class Editor</b>, click the <b>New</b> button attached to the <b>Methods</b> listbox; an empty <b>Method Editor</b>
+should pop up to the left.  
+<li>In its <b>Name</b> field, type <b>whereAmI</b>.  This is the method name we declared above; uMail will look for a method 
+by this name when the user selects the new <b>Where Am I?</b> menu item.
+<li>uMail will also expect this method to have two parameters, a <b>Account</b> and a <b>Folder</b>.  Click the <b>New</b>
+button under the <b>Parameters</b> listbox, to create one parameter; a <b>Variable Editor</b> should pop up.
+<li>Type in any name you like in the <b>Name</b> field, as it is for your reference only; <b>account</b> will do.
+<li>Hot-select the <b>Account</b> type from the Type Tree and hot-drop it on the <b>Type</b> in the <b>Variable Editor</b>.  This
+tells Decaf the parameter should be an <b>Account</b>.
+<li>Following the previous three steps, create a parameter of type <b>Folder</b>.
+<li>Before we get too far, let's test this menu item by having it report something to the command line.  Right-click in the 
+<b>Body</b> listbox of the <b>Method Editor</b> and choose <b>Report to Command Line</b>.
+<li>Double-click in the box (which currently contains <b>&lt;none&gt;</b>) and type <b>You are here</b>.  This isn't helpful
+information for the user, but we're just testing.  
+<li><b>Ok</b> away the <b>Code Editor</b> and <b>Method Editor</b>, and click both the <b>Save</b> and <b>Compile</b> buttons
+on the <b>Class Editor</b>.  Notice that a window pops up containing the Java code that Decaf has produced from your plugin.
+<li>Close Decaf, exit uMail with option 5, start uMail again, and log in with your first name.  It is necessary to restart
+uMail in this prototype because Java has already loaded your plugin, and will not unload it until uMail closes.  The production
+version of Decaf won't have this annoying problem. 
+<li>At the uMail prompt, enter 2 to <b>View Mail</b>, and 4 to ask <b>Where am I?</b>.  uMail coyly responds that <b>You are here.</b>
+That's ridiculous!  It should show you the name of each folder up to the top of the folder tree.  Enter '4e' to edit this
+unruly plugin.
+<li>Notice that there are now two methods named <b>whereAmI</b> in the <b>Methods</b> listbox of the <b>Class Editor</b>.
+Well, this is a bug in the prototype: uMail has told Decaf that the user is editing a method named <b>whereAmI</b> with parameters 
+of type <b>Account</b> and <b>Folder</b>, and Decaf, failing to recognize that the method already exists, has created a new one 
+with the same signature.  Click the <b>Compile</b> button to see that this it is illegal in Java to have two methods with the
+same name and parameter types on the same class.  We'll have to fix this: delete the second of the duplicate methods by selecting it 
+in the <b>Methods</b> listbox and pressing <b>Delete</b>.  Sorry about that.  
+<li>Double-click the remaining <b>whereAmI</b> method to edit it, and delete the preposterous <b>Report to Command Line</b> in 
+its <b>Body</b> listbox (select and press <b>Delete</b>).
+<li>We'll need a folder variable to represent the current folder as we walk up the folder tree.  Declare it by right-clicking
+in the <b>Body</b> listbox and choosing <b>Declare a Variable</b>.
+<li>Give it a name, unique from the parameter <b>folder</b>, perhaps <b>currentFolder</b>.
+<li>Open the Type Chooser with ctrl-T, hot-select the <b>Folder</b> node, and hot-drop it in the <b>Variable Editor</b>'s
+<b>Type</b> field.  <b>Ok</b> the <b>Variable Editor</b> away.
+<li>Initialize <b>currentFolder</b> by right-clicking and choosing <b>Assignment and Arithmetic</b>.
+<li>Hot-select <b>currentFolder</b> from its home in the <b>Body</b> listbox of the <b>Method Editor</b> (be sure you don't 
+hot-select multiple items), and hot-drop it on the left side of the <b>Code Editor</b> that has just popped up.
+<li>Hot-select the parameter <b>folder</b> from the <b>Parameters</b> listbox of the <b>Method Editor</b>, and hot-drop it
+into the right side of the <b>Code Editor</b>.  Notice that the drop-down box in between the two variables shows <b>=</b>; 
+this is correct, we are assigning the one to the other.
+<li>Right-click in the method body and choose <b>Loop While</b>.  
+<li>In the <b>While</b> box, right-click and choose <b>Comparison</b>.
+<li>Hot-drop <b>currentFolder</b> on the left side of the comparison <b>Code Editor</b>.
+<li>Select the operator <b>!=</b> from the list box in the middle of the comparison.
+<li>Hot-drop the type <b>null</b> from the Type Chooser onto the right side of the comparison.  This says, keep repeating the 
+code in the <b>Do</b> box until <b>currentFolder</b> is null.
+<li>The first step is to print the name of the <b>currentFolder</b>.  Right-click in the <b>Do</b> listbox and choose 
+<b>Report to Command Line</b>.  
+<li>In its box, right-click and choose <b>Class Member</b>.
+<li>Hot-drop the <b>currentFolder</b>, from its home in the method body, onto the <b>Recipient</b> box of the class member.
+This says that we are calling a method on <b>currentFolder</b>.
+<li>Select <b>getName</b> in the <b>Member</b> listbox and <b>Ok</b> the top two <b>Code Editor</b>s away.
+<li>Right-click in the <b>Do</b> listbox (of the <b>While</b> loop -- open it from the method body with a double-click if it
+has somehow been closed), and choose <b>Assignment and Arithmetic</b>.
+<li>Hot-drop <b>currentFolder</b> (always from its home in the method body) on the left side of the assignment.
+<li>Right-click in the box on the right side of the assignment and choose class member.  
+<li>Hot-drop <b>currentFolder</b> on the <b>Recipient</b> box and choose <b>getParent</b> in the <b>Member</b> listbox.  This 
+takes one step up the folder tree.
+<li>That's it!  <b>Ok</b> away all the dialogs, and click <b>Save</b> and <b>Compile</b> in the <b>Class Editor</b>.  Look in 
+the code window to see the method you've just created.
+<li>Close Decaf and restart uMail, as we did when testing our new menu item.  
+<li>Log back into uMail, enter '2' to <b>View Mail</b>, and '4' to see where you are.  Go into the <b>Inbox</b> and try
+it again, just to lavish in the fruits of your labors.  Notice that the folders print in reverse order, starting with 
+the folder that you're in, and ending with the &lt;root&gt; folder.  That's not very intuitive... but there's no way to
+print them in the correct order using a while loop.  Did you do the <a href="#Experimentation">experimentation</a>
+exercise above?  I'll be you can use the method you created there to print the folders starting with the &lt;root&gt; and
+ending with the current folder.  Try it!
+</dir>
+
+<h3>In Conclusion</h3>
+
+Well, what do you think?  Is the point-and-click coding process agreeable to you?  Do you find it cumbersome and difficult
+to visualize in your mind?  Are you relieved that the Decaf editor doesn't allow you to make spelling errors?  Do you wish
+you could reference variables out of scope, with the idea that you will arrange for them to be in scope later on?  Think
+about it.  If you'd like to spend some more time with the Decaf editor, try creating a folder menu item that allows the 
+user to create a folder by name.
+</dir>
+
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+</body>

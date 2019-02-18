@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../umail/util.h</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>/*
+ * Copyright (C) 2003 HawkinsSoftware
+ *
+ * This prototype of the Decaf Java development environment is free 
+ * software.  You can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software 
+ * Foundation.  However, no compilation of this code or a derivative
+ * of it may be used with or integrated into any commercial application,
+ * except by the written permisson of HawkinsSoftware.  Future versions 
+ * of this product will be sold commercially under a different license.  
+ * HawkinsSoftware retains all rights to this product, including its
+ * concepts, design and implementation.
+ *
+ * This prototype is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */</font>
+<font color=#9A1900>// &lt;[a name="start"/]&gt;
+</font>
+<font color=#9A1900>// util.h
+</font>
+<font color=#9A1900>/*
+This file contains a few nice utilities which are duplicates of standard library
+offerings.  I've implemented my own here to try out the various aspects of 
+integrating them with Java.
+*/</font>
+
+<font color=#0000FF>#ifndef</font> _util_h 
+<font color=#0000FF>#define</font> _util_h
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;forward.h&gt;</font>
+
+<font color=#0000FF>using</font> <font color=#0000FF>namespace</font> ::std;
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;template.h&gt;</font>
+
+<font color=#9A1900>// &lt;[a name="Node"/]&gt;
+</font><font color=#9A1900>/*
+A Node of class List, below.
+*/</font>
+<font color=#0000FF>class</font> Node
+{
+<font color=#0000FF>private</font>:
+    <font color=#009900>void</font>* content;
+    Node* next;
+    Node* prev;
+    List* owner;
+<font color=#0000FF>public</font>:
+    Node(List* owner, <font color=#009900>void</font>* content);
+    <font color=#009900>void</font>* getContent();
+    <font color=#009900>void</font> follow(Node* next);
+    <font color=#009900>void</font> remove();
+    Node* getNext();
+    Node* getPrev();
+    Node* getFirst();
+};
+
+<font color=#9A1900>// &lt;[a name="List"/]&gt;
+</font><font color=#9A1900>/*
+A linked list.
+*/</font>
+<font color=#0000FF>class</font> List
+{
+<font color=#0000FF>private</font>:
+    <font color=#009900>int</font> size;
+    Node* first;
+    Node* last;
+<font color=#0000FF>public</font>:
+    List();
+    <font color=#009900>void</font> append(<font color=#009900>void</font>* addMe);
+    <font color=#009900>int</font> getSize();
+    ListIterator* iterator();
+    <font color=#009900>void</font> shrink();
+    
+    <font color=#0000FF>friend</font> <font color=#0000FF>class</font> Node;
+};
+
+<font color=#9A1900>// &lt;[a name="ListIterator"/]&gt;
+</font><font color=#9A1900>/*
+An iterator over a List (above), derived from uIterator such that it can be
+exported to Java as a java.util.Iterator.
+*/</font>
+<font color=#0000FF>class</font> ListIterator : <font color=#0000FF>public</font> uIterator
+{
+<font color=#0000FF>private</font>:
+    Node* current;
+<font color=#0000FF>public</font>:
+    ListIterator();    <font color=#9A1900>// bogus, for SWIG
+</font>    <font color=#009900>bool</font> hasNext();
+    jobject next();
+    <font color=#009900>void</font>* getNext();
+    <font color=#009900>void</font> remove();
+    <font color=#009900>void</font> reset();
+
+    <font color=#9A1900>// hidden from Decaf
+</font>    ListIterator(Node* first);
+};
+
+<font color=#9A1900>// &lt;[a name="Property"/]&gt;
+</font><font color=#9A1900>/*
+A name-value association, as commonly found in a properties file.
+*/</font>
+<font color=#0000FF>struct</font> Property
+{
+    string name;
+    string value;
+};
+
+<font color=#0000FF>typedef</font> uVector&lt;Property&gt; Properties;
+
+<font color=#9A1900>// &lt;[a name="Config"/]&gt;
+</font><font color=#9A1900>/*
+A file of properties.
+*/</font>
+<font color=#0000FF>class</font> Config
+{
+<font color=#0000FF>private</font>:
+    Properties* properties;
+<font color=#0000FF>public</font>:
+    Config(string filename);
+    string get(string property);
+};
+
+<font color=#0000FF>#endif</font>
+</tt>
+</pre>
+</body>
+</html>

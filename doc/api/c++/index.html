@@ -1,0 +1,232 @@
+
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<title>uMail Source Documentation</title>
+</head>
+<body>
+
+<h2>Overview</h2>
+The application uMail is entirely contained within <a href="#uMail">uMail.exe</a>, except 
+for the implementation of those system objects that defer to plugins.  The static library
+<a href="#plugin">plugin.o</a> and the dynamic library <a href="#jMail">jMail.dll</a> facilitate
+the running and editing of plugins.  Both uMail.exe and jMail.dll link with plugin.o, which
+provides the mechanism for instantiating the <a href="../../Glossary.html#JVM">JVM</a> and the plugins within it.
+The library jMail.dll is required because Java will only call native methods that are
+exported from a dynamic library; it will not call back into the executable that launched it.
+If the main application is not packaged as a dynamic library, then the library must somehow
+route the function calls it receives back into the main application.
+<p>&nbsp;<p>
+
+<a name="plugin"/>
+<table border=2 cellpadding=4>
+<caption>Static library plugin.o<br>&nbsp;</caption>
+<th>File</th>
+<th>Class</th>
+<th>Summary</th>
+<tr>
+	<td><a href="plugin.html#start">plugin.h</a></td>
+	<td><a href="plugin.html#jVM">jVM</a></td>
+	<td>The Java virtual machine, instantiated at application startup</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="plugin.html#jType">jType</a></td>
+	<td>Base class for all classes exported to Java from a dynamic library</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="plugin.html#Plugin">Plugin</a></td>
+	<td>Facility for identifying, running and editing plugins</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="plugin.html#jPluginLib">jPluginLib</a></td>
+	<td>Proxy object passed through the JVM to the dynamic library</td>
+</tr>
+<tr>
+	<td><a href="template.html#start">template.h</a></td>
+	<td><a href="template.html#uIterator">uIterator</a></td>
+	<td>Implementation of the Java interface java.lang.Iterator for <a href="template.html#uVector">uVector</a></td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="template.html#uVector">uVector</a></td>
+	<td>A simple Vector, used in experiments with exporting templates to Java</td>
+</tr>
+</table>
+
+<p>&nbsp;<p>
+
+<a name="jMail"/>
+<table border=2 cellpadding=4>
+<caption>jMail.dll<br>&nbsp;</caption>
+<th>File</th>
+<th>Class</th>
+<th>Summary</th>
+<tr>
+	<td><a href="jMail.html#start">jMail.h</a></td>
+	<td><a href="jMail.html#jTime">jTime</a></td>
+	<td>A date/time object, exported to Java as <a href="uMail_i.html#jTime">java.util.GregorianCalendar</a></td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jAddressee">jAddressee</a></td>
+	<td>Routes to <a href="account.html#Addressee">Addressee</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jMessage">jMessage</a></td>
+	<td>Routes to <a href="account.html#Message">Message</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jFolder">jFolder</a></td>
+	<td>Routes to <a href="account.html#Folder">Folder</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jAccount">jAccount</a></td>
+	<td>Routes to <a href="account.html#Account">Account</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jMenu">jMenu</a></td>
+	<td>Routes to <a href="ui.html#Menu">Menu</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jMenuOption">jMenuOption</a></td>
+	<td>Routes to <a href="ui.html#PluginMenuOption">PluginMenuOption</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jFolderMenuOption">jFolderMenuOption</a></td>
+	<td>Routes to <a href="ui.html#FolderMenuOption">FolderMenuOption</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jMessageMenuOption">jMessageMenuOption</a></td>
+	<td>Routes to <a href="ui.html#MessageMenuOption">MessageMenuOption</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jFolderMenuPlugin">jFolderMenuPlugin</a></td>
+	<td>Routes to <a href="ui.html#PluginFolderMenuOption">PluginFolderMenuOption</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jPrompt">jPrompt</a></td>
+	<td>Routes to <a href="ui.html#Prompt">Prompt</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jMessageInput">jMessageInput</a></td>
+	<td>Routes to <a href="ui.html#MessageInput">MessageInput</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jDataDisplay">jDataDisplay</a></td>
+	<td>Routes to <a href="ui.html#DataDisplay">DataDisplay</a> in the main application</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="jMail.html#jMessageDisplay">jMessageDisplay</a></td>
+	<td>Routes to <a href="ui.html#MessageDisplay">MessageDisplay</a> in the main application</td>
+</tr>
+</table>
+
+Note that the dynamic library jMail.dll currently links with all the object
+files of uMail.exe.  This is silly... <a href="plugin.html#jPluginLib">here</a>'s how it happened.  
+
+<p>&nbsp;<p>
+
+<a name="uMail"/>
+<table border=2 cellpadding=4>
+<caption>uMail.exe<br>&nbsp;</caption>
+<th>File</th>
+<th>Class</th>
+<th>Summary</th>
+<!-- uMail.h -->
+<tr>
+	<td><a href="uMail.html#start">uMail.h</a></td>
+	<td><a href="uMail.html#uMail">uMail</a></td>
+	<td>The star of the show</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="uMail.html#Activity">Activity</a></td>
+	<td>Base class for all objects implementing system activity</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="uMail.html#SendMail">SendMail</a></td>
+	<td>Sends mail messages</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="uMail.html#ReceiveMail">ReceiveMail</a></td>
+	<td>Receives mail messages</td>
+</tr>
+<!-- account.h -->
+<tr>
+	<td><a href="account.html#start">account.h</a></td>
+	<td><a href="account.html#MailFile">MailFile</a></td>
+	<td>The uMail offline storage file</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="account.html#Addressee">Addressee</a></td>
+	<td>A mail recipient</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="account.html#Message">Message</a></td>
+	<td>A mail message</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="account.html#Folder">Folder</a></td>
+	<td>A mail folder</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="account.html#PluginAssignment">PluginAssignment</a></td>
+	<td>A plugin assignment for a specific plugin class and account</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="account.html#PluginAssignments">PluginAssignments</a></td>
+	<td>All the plugin assignments for an account</td>
+</tr>
+<tr>
+	<td></td>
+	<td><a href="account.html#Account">Account</a></td>
+	<td>A user account</td>
+</tr>
+<!-- ui.h -->
+<tr>
+	<td><a href="ui.html#start">ui.h</a></td>
+	<td>...</td>
+	<td>
+		User interface facilities, designed to represent more sophisticated 
+		implementations than the command-line mechanisms used here.
+	</td>
+</tr>
+<!-- util.h -->
+<tr>
+	<td><a href="util.html#start">util.h</a></td>
+	<td>...</td>
+	<td>Utility classes, some for experimentation with exporting to Java</td>
+</tr>
+</table>
+
+<p>
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+
+</body>

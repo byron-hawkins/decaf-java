@@ -1,0 +1,399 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../decaf/native/plugin.h</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>/*
+ * Copyright (C) 2003 HawkinsSoftware
+ *
+ * This prototype of the Decaf Java development environment is free 
+ * software.  You can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software 
+ * Foundation.  However, no compilation of this code or a derivative
+ * of it may be used with or integrated into any commercial application,
+ * except by the written permisson of HawkinsSoftware.  Future versions 
+ * of this product will be sold commercially under a different license.  
+ * HawkinsSoftware retains all rights to this product, including its
+ * concepts, design and implementation.
+ *
+ * This prototype is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */</font>
+<font color=#9A1900>// &lt;[a name="start"/]&gt;
+</font>
+<font color=#9A1900>// plugin.h
+</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;jni.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;windows.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;stdarg.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;iostream&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;fstream&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;string&gt;</font>
+
+<font color=#0000FF>#define</font> clog *Plugin::log
+
+<font color=#0000FF>#ifndef</font> __plugin_h__
+<font color=#0000FF>#define</font> __plugin_h__
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;template.h&gt;</font>
+
+<font color=#0000FF>using</font> <font color=#0000FF>namespace</font> ::std;
+
+<font color=#9A1900>/* Anonymous class to serve as the base of function pointers passed to the 
+dynamic library from the native application.
+class Root{};
+*/</font>
+
+<font color=#0000FF>class</font> jObject;
+<font color=#0000FF>class</font> jClass;
+<font color=#0000FF>class</font> jMethod;
+
+<font color=#9A1900>// &lt;[a name="Method"/]&gt;
+</font><font color=#9A1900>/*
+The Method class identifies a native method by name and pointer reference.  When
+wrapper classes in the dynamic library use function pointers to obtain reference
+to the body of the native application, instances of this class are passed from
+the application to the dynamic library.  The library casts the void* handle 
+to the appropriate function type (as a member of the anonymous class Root),
+and uses it to call the functions that have been loaded in the main application's
+address space.
+*/</font>
+<font color=#9A1900>/* Function pointer example:
+class Method
+{
+private:
+    string name;
+    void* handle;
+public:
+    Method(string n, void* h) : name(n), handle(h) {};
+    string getName();
+    void* getHandle();
+};
+
+typedef uVector&lt;Method&gt; Methods;
+*/</font>
+
+<font color=#0000FF>typedef</font> uVector&lt;<font color=#009900>char</font>&gt; charVector;
+<font color=#0000FF>typedef</font> uVector&lt;jObject&gt; jObjects;
+<font color=#0000FF>typedef</font> uVector&lt;_jobject&gt; jVector;
+<font color=#0000FF>typedef</font> uVector&lt;<font color=#009900>void</font>*&gt; vVector;
+
+<font color=#9A1900>// &lt;[a name="jVM"/]&gt;
+</font><font color=#9A1900>/*
+jVM represents the Java virtual machine, where all plugins are run and edited.
+*/</font>
+<font color=#0000FF>class</font> jVM
+{
+<font color=#0000FF>private</font>:
+    JavaVM* jvm;
+    string classpath;
+
+    jVM::jVM(JavaVM* vm, JNIEnv* e, string c) : jvm(vm), env(e), classpath(c) {};
+    
+    <font color=#0000FF>static</font> string previous_jvmLocation;
+    <font color=#0000FF>static</font> string previous_classpath;
+<font color=#0000FF>public</font>:
+    JNIEnv* env;
+
+     jVM::~jVM();
+     <font color=#0000FF>const</font> <font color=#009900>char</font>* getClasspath();
+     
+     <font color=#009900>void</font> reloadEnv();
+     
+    <font color=#0000FF>static</font> jVM* create(<font color=#0000FF>const</font> <font color=#009900>char</font>* jvmLocation, string classpath);
+    <font color=#0000FF>static</font> jVM* reload();
+};
+
+<font color=#9A1900>// &lt;[a name="jString"/]&gt;
+</font><font color=#9A1900>/*
+jString provides a string object that is both suitable for a collection and 
+recognizable to Java.
+*/</font>
+<font color=#0000FF>class</font> jString 
+{
+<font color=#0000FF>private</font>:
+    string content;
+    jObject* jContent;
+<font color=#0000FF>public</font>:
+    jString() { cerr &lt;&lt; <font color=#FF0000>"Warning!  Call to unsupported constructor jString()"</font> &lt;&lt; endl; };
+    <font color=#009900>char</font>* get();
+
+    <font color=#9A1900>// hidden from Decaf
+</font>    <font color=#0000FF>static</font> jClass* clazz;
+    <font color=#0000FF>static</font> jMethod* cx;
+
+    jString(string s);
+    jobject getObject();
+    <font color=#0000FF>static</font> <font color=#009900>void</font> init();
+};
+
+<font color=#9A1900>// &lt;[a name="jHandle"/]&gt;
+</font><font color=#9A1900>/*
+jHandle serves as a handle to the Decaf editor, providing facilities to launch
+the editor with any plugin and method.  
+*/</font>
+<font color=#0000FF>class</font> jHandle
+{
+<font color=#0000FF>private</font>:
+    string methodName;
+    string pluginName;
+    string description;
+    jVector* parameterTypes;
+    
+    <font color=#0000FF>static</font> jClass* decafEditor;
+    <font color=#0000FF>static</font> jMethod* go;
+    <font color=#0000FF>static</font> jClass* jHandleClass;
+    <font color=#0000FF>static</font> jMethod* jHandleCx;
+<font color=#0000FF>public</font>:
+    jHandle() { cerr &lt;&lt; <font color=#FF0000>"Erroneous call to jHandle()!  This constructor is provided only for SWIG simplification (so it doesn't wrap all the unused parameters which are never accessed from Java anyway."</font> &lt;&lt; endl; };
+    <font color=#009900>char</font>* getMethodName();
+    <font color=#009900>char</font>* getPluginName();
+    <font color=#009900>char</font>* getDescription();
+    uIterator* getParameterTypes();    
+    <font color=#009900>void</font> setPluginName(<font color=#009900>char</font>* n);
+    
+    <font color=#9A1900>// not available to Decaf
+</font>    jHandle(string m, string p, string d, jVector* pt) : methodName(m), pluginName(p), description(d), parameterTypes(pt) {};
+    <font color=#009900>void</font> edit();
+    <font color=#0000FF>static</font> <font color=#009900>void</font> init();
+};
+
+<font color=#9A1900>// &lt;[a name="jType"/]&gt;
+</font><font color=#9A1900>/*
+To export a class from the native application to the Plugin type library, wrap
+the native class in a subclass of jType.  In the wrapper's constructor, pass 
+along to jType the (unqualified) classname of the wrapper, along with a pointer
+to the object being wrapped.  
+*/</font>
+<font color=#0000FF>class</font> jType
+{
+<font color=#0000FF>protected</font>:
+    string uName;
+    <font color=#009900>void</font>* content;
+<font color=#0000FF>public</font>:
+    jType(string u);
+    jType(string u, <font color=#009900>void</font>* c);
+    <font color=#009900>char</font>* unqualifiedName();
+    <font color=#009900>void</font>* getContent();
+    
+    jType() { cerr &lt;&lt; <font color=#FF0000>"Warning!  Call to bogus empty constructor of jType!"</font> &lt;&lt; endl; };
+};
+
+<font color=#9A1900>// &lt;[a name="jMethod"/]&gt;
+</font><font color=#9A1900>/*
+jMethod wraps an instance of the JNI method identifier construct jmethodID.
+*/</font>
+<font color=#0000FF>class</font> jMethod
+{
+<font color=#0000FF>private</font>:
+    jmethodID method;
+<font color=#0000FF>public</font>:
+    jMethod(jclass clazz, string name, string parameters, <font color=#009900>bool</font> isStatic);
+    jmethodID getMethod();
+    <font color=#009900>bool</font> isValid();
+};
+
+<font color=#9A1900>// &lt;[a name="jObject"/]&gt;
+</font><font color=#9A1900>/*
+jObject wraps an instance of the JNI class jobject.
+*/</font>
+<font color=#0000FF>class</font> jObject
+{
+<font color=#0000FF>private</font>:
+    jobject object;
+<font color=#0000FF>public</font>:
+    jObject(jclass clazz, jmethodID cx);
+    jObject(jclass clazz, jmethodID cx, jObject* cxParam);
+    jObject(jclass clazz, jmethodID cx, <font color=#009900>void</font>* cxParam1, <font color=#009900>bool</font> cxParam2);
+    <font color=#009900>void</font> makeGlobal();
+    jobject getObject();
+    <font color=#009900>void</font> call(jMethod* method, jObjects* args);
+    <font color=#009900>bool</font> isValid();
+};
+
+<font color=#9A1900>// &lt;[a name="jClass"/]&gt;
+</font><font color=#9A1900>/*
+jClass wraps an instance of the JNI jclass, a construct which contains the 
+definition of a Java class.
+*/</font>
+<font color=#0000FF>class</font> jClass
+{
+<font color=#0000FF>private</font>:
+    jclass clazz;
+    string classname;
+    
+<font color=#0000FF>public</font>:
+    jClass(string c);
+    <font color=#009900>void</font> makeGlobal();
+    jclass getClass();
+    jMethod* getMethod(string name, string signature);
+    jMethod* getStaticMethod(string name, string signature);
+    jObject* newObject(jMethod* cx);
+    jObject* newObject(jMethod* cx, jObject* param);
+    jObject* new_pObject(jMethod* cx, <font color=#009900>void</font>* param1);
+    <font color=#009900>bool</font> isValid();
+};
+
+<font color=#9A1900>// &lt;[a name="PluginParameter"/]&gt;
+</font><font color=#9A1900>/*
+The PluginParameter class represents the declaration and Java constructs of 
+a parameter to a plugin.  
+*/</font>
+<font color=#0000FF>class</font> PluginParameter
+{
+<font color=#0000FF>private</font>:
+    string jName;
+    string jDotName;
+    string jDeclaration;
+    jClass* paramClass;
+    jMethod* paramCx;
+    jObject* pVoid;
+    
+    <font color=#0000FF>static</font> jClass* pVoidType;
+    <font color=#0000FF>static</font> jMethod* pVoidCx;
+<font color=#0000FF>public</font>:
+    PluginParameter(jType* content);
+    string getDeclaration();
+    string get_jName();
+    string get_jDotName();
+    <font color=#009900>void</font> setContent(jType* content);
+    jObject* wrap();
+    <font color=#009900>bool</font> isValid();
+
+    <font color=#0000FF>static</font> <font color=#009900>void</font> init();
+    
+    <font color=#0000FF>friend</font> <font color=#0000FF>class</font> Plugin;
+};
+
+<font color=#0000FF>typedef</font> uVector&lt;PluginParameter&gt; PluginParameters;
+
+<font color=#9A1900>// &lt;[a name="Plugin"/]&gt;
+</font><font color=#9A1900>/*
+The Plugin class represents a method of a Java class (which is presumed to be a
+plugin).  It has three phases to its life-cycle:
+
+1) instantiation: creating an instance of Plugin is like saying, "somewhere
+out there is a Java class containing a method 'x' with parameters 'y,z,...'".
+The plugin is now available to edit(), but cannot yet be run(): it must first
+be resolved to a Java class (step 2).
+
+2) class resolution: call the createFor(string) method to resolve this plugin to 
+an actual Java class file (whose name is the string parameter); a new instance 
+of Plugin with the specified name will be returned.  
+
+3) parameter resolution: call the instantiate(int, ...) method to resolve the
+parameters of this Plugin to actual object values.  The values types must each 
+be a subclass of jType (above), and each must have a constructor with a single
+void* parameter by which its data can be passed.  If more complex types are 
+required, some modifications to this wrapper will need to be made.  
+
+After step 3 has been completed, the Plugin is ready to run().  
+*/</font>
+<font color=#0000FF>class</font> Plugin
+{
+<font color=#0000FF>private</font>:
+    string name;
+    string runMethodName;
+    string paramDescription;
+    string signature;
+    jObject* plugin;
+    jMethod* runMethod;
+    PluginParameters* params;
+    jVector* paramTypes;
+    jObjects* args;
+    <font color=#009900>bool</font> runnable;
+
+    Plugin(Plugin* model);
+    
+    <font color=#0000FF>static</font> string NONE;
+    <font color=#0000FF>static</font> string classnameBase;
+    <font color=#0000FF>static</font> string classnameDottedBase;
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>static</font> ofstream* log;
+    <font color=#0000FF>static</font> jVM* jvm;
+    <font color=#0000FF>static</font> <font color=#009900>void</font>* appHandle;
+
+    Plugin(string runMethodName, <font color=#009900>int</font> jParamTypeCount, ...);
+    string getName();
+    <font color=#0000FF>const</font> string describe();
+    <font color=#009900>void</font> instantiate(<font color=#009900>int</font> jParamCount, ...);
+    <font color=#009900>void</font> run();
+    <font color=#009900>void</font> edit(string pluginName);
+    Plugin* createFor(string name);
+    
+    <font color=#0000FF>static</font> <font color=#009900>void</font> init(jVM* vm, string classnameBase, <font color=#009900>void</font>* app, string logname);
+    <font color=#0000FF>static</font> <font color=#009900>void</font> init(jVM* vm, string classnameBase, <font color=#009900>void</font>* app, ofstream* logfile);
+    <font color=#0000FF>static</font> <font color=#009900>void</font> callEmptyStaticMethod(string className, string methodName);
+    <font color=#0000FF>static</font> <font color=#009900>void</font> require(<font color=#009900>bool</font> truth, string consequences);
+    <font color=#0000FF>static</font> string qualify(string classname);
+    <font color=#0000FF>static</font> string dottify(string classname);
+    
+    <font color=#9A1900>/* Function pointer example
+    static Methods* methods;
+    static void* getMethod(string name);
+    static void init(jVM* vm, string classnameBase, void* app, string logname, Methods* m);
+    static void init(jVM* vm, string classnameBase, void* app, ofstream* logfile, Methods* m);
+    */</font>
+};
+
+<font color=#9A1900>// &lt;[a name="jPluginLib"/]&gt;
+</font><font color=#9A1900>/*
+The jPluginLib class serves as a bridge between the native application and the
+dynamic library loaded by Java.  Ideally, we would have the Java plugins call 
+directly back to the native application.  But Java will only call native functions
+that are exported from a dynamic library, even when the &lt;[a href="../../Glossary.html#JVM"]&gt;JVM&lt;[/a]&gt; is running in the
+process space of the native application (!).  The developer has two options:
+
+1) build the entire application into a dynamic library.
+2) build the application into a standard executable, and pass a block of 
+&lt;[a href="jMail.html#function_pointer"]&gt;function pointers&lt;[/a]&gt; through the JVM to the dynamic library.
+
+In my reckless experimentation, I've left the current implementation of uMail halfway
+in between these two options, demonstrating the worst of both worlds.  Oops.  Well,
+at least you can see what I'm talking about.  
+
+Note that jPluginLib loads the dynamic library from its Java code in &lt;[a href="uMail_i.html#jPluginLib"]&gt;this&lt;[/a]&gt; manner.  
+*/</font>
+<font color=#0000FF>class</font> jPluginLib
+{
+<font color=#0000FF>private</font>:
+    jVM* jvm;
+    <font color=#009900>char</font>* classnameBase;
+    <font color=#009900>void</font>* app;
+    ofstream* logfile;
+    
+    <font color=#9A1900>/* Function pointer example:
+    Methods* methods; */</font>
+<font color=#0000FF>public</font>:
+    jPluginLib() { cout &lt;&lt; <font color=#FF0000>"Warning!  Constructor jPluginLib() called.  This constructor exists only for compilation with an erroneous assumption made by SWIG.  It should never be called."</font> &lt;&lt; endl; };
+    jPluginLib(jVM* vm, <font color=#009900>char</font>* c, <font color=#009900>void</font>* a, ofstream* l) : <font color=#9A1900>//, Methods* m) 
+</font>         jvm(vm), classnameBase(c), app(a), logfile(l) <font color=#9A1900>/*, methods(m)*/</font> {};
+
+    <font color=#0000FF>static</font> uIterator* create_jIterator(string jName, string pName, uIterator* content);
+
+    <font color=#9A1900>// this are available to JNI
+</font>    <font color=#0000FF>static</font> <font color=#009900>void</font> init(<font color=#009900>void</font>* lib);
+    <font color=#0000FF>static</font> <font color=#009900>void</font> log(<font color=#009900>char</font>* message);    <font color=#9A1900>// available to plugins
+</font>    <font color=#0000FF>static</font> <font color=#0000FF>const</font> <font color=#009900>char</font>* getClasspath();
+};
+
+<font color=#0000FF>#endif</font>
+</tt>
+</pre>
+</body>
+</html>

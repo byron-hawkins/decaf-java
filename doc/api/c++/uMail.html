@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../umail/uMail.h</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>/*
+ * Copyright (C) 2003 HawkinsSoftware
+ *
+ * This prototype of the Decaf Java development environment is free 
+ * software.  You can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software 
+ * Foundation.  However, no compilation of this code or a derivative
+ * of it may be used with or integrated into any commercial application,
+ * except by the written permisson of HawkinsSoftware.  Future versions 
+ * of this product will be sold commercially under a different license.  
+ * HawkinsSoftware retains all rights to this product, including its
+ * concepts, design and implementation.
+ *
+ * This prototype is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */</font>
+<font color=#9A1900>// <a name="start"/>
+</font>
+<font color=#9A1900>// umail.h
+</font>
+<font color=#9A1900>/*
+This file contains the core implementation of uMail.
+*/</font>
+
+<font color=#0000FF>#ifndef</font> __umail_h__
+<font color=#0000FF>#define</font> __umail_h__
+
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;forward.h&gt;</font>
+
+<font color=#0000FF>using</font> <font color=#0000FF>namespace</font> ::std;
+
+<font color=#9A1900>// <a name="Activity"/>
+</font><font color=#9A1900>/*
+uMail implements the Decaf principle "intrinsic accessibility" through the 
+base class Activity.  Each uMail class that performs system activity derives 
+from this Activity class, which maintains a plugin by which the user can modify 
+that piece of system functionlity.  An Activity is "active" if it has been 
+assigned a classname and Plugin*, with which it can run a plugin.  Here the term
+"classname" refers to a class of Activity, and it is by this reference name that
+a plugin is associated with an Activity for a particular user.  See the 
+<a href="account.html#Account">Account</a> class for more information on plugin 
+assignments.
+*/</font>
+<font color=#0000FF>class</font> Activity
+{
+<font color=#0000FF>protected</font>:
+    string classname;
+    Plugin* pluginModel;
+    string display;
+    <font color=#009900>bool</font> active;
+    
+    string getName();
+    <font color=#009900>bool</font> hasPlugin();
+<font color=#0000FF>public</font>:
+    Activity() : active(<font color=#0000FF>false</font>), classname(<font color=#FF0000>"none"</font>) {};
+    Activity(Activity* a);
+    <font color=#009900>void</font> activate(string cn, Plugin* model);
+    string getDisplayText();
+    <font color=#009900>void</font> edit();
+    <font color=#009900>void</font> assignPlugin(string instanceName);
+    Plugin* getPlugin();
+    Plugin* getPlugin(Account* forAccount);
+    <font color=#009900>bool</font> isActive();
+    
+    <font color=#0000FF>friend</font> <font color=#0000FF>class</font> Account;
+    <font color=#0000FF>friend</font> <font color=#0000FF>class</font> uMail;
+};
+
+<font color=#9A1900>// <a name="DisplayMenu"/>
+</font><font color=#9A1900>/*
+DisplayMenu maintains reference to a <a href="ui.html#Menu">Menu</a>, which it 
+sends to its plugin for user access for calling its askUser() method to start its 
+interaction with the user at the command line.  
+*/</font>
+<font color=#0000FF>class</font> DisplayMenu : <font color=#0000FF>public</font> Activity
+{
+<font color=#0000FF>private</font>:
+    Menu* menu;
+<font color=#0000FF>public</font>:
+    DisplayMenu(Menu* m);
+    MenuOption* run();
+};
+
+<font color=#9A1900>// <a name="SendMail"/>
+</font><font color=#9A1900>/*
+SendMail sees a message to the "front door" of the currently active account.
+It simply calls its plugin, which in the default implementation puts a copy
+of the message in the inbox.  <a href="#ReceiveMail">ReceiveMail</a> 
+(below) is responsible for putting the message in the recipient's account.
+*/</font>
+<font color=#0000FF>class</font> SendMail : <font color=#0000FF>public</font> Activity
+{
+<font color=#0000FF>public</font>:
+    SendMail();
+    <font color=#009900>void</font> send(Message* message);
+};
+
+<font color=#9A1900>// <a name="ReceiveMail"/>
+</font><font color=#9A1900>/*
+ReceiveMail takes a message from the "front door" of the active account, gets
+the recipient's account (creating it if necessary), and calls that user's 
+ReceiveMail plugin with the message.  The default plugin implementation puts 
+the message in the account's Inbox, though it is anticipated that users will
+sort their mail into subfolders using the ReceiveMail plugin.
+*/</font>
+<font color=#0000FF>class</font> ReceiveMail : <font color=#0000FF>public</font> Activity
+{
+<font color=#0000FF>public</font>:
+    ReceiveMail();
+    <font color=#009900>void</font> receive(Message* message);
+};
+
+<font color=#9A1900>// <a name="uMail"/>
+</font><font color=#9A1900>/*
+The uMail class represents the uMail application.  It logs users in and out,
+initiates the main menu (delegated to member mainMenu), and oversees mail 
+delivery (delegated to members sendMail and receiveMail via send(Message*)).
+*/</font>
+<font color=#0000FF>class</font> uMail
+{
+<font color=#0000FF>private</font>:
+    jVM* jvm;
+    Account* activeAccount;
+    Accounts* accounts;
+    Menu* mainMenu;
+    MailFile* mailFile;
+
+    DisplayMenu* activity_mainMenu;    
+    SendMail* sendMail;
+    ReceiveMail* receiveMail;
+
+    <font color=#0000FF>static</font> uMail* _instance;
+
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>static</font> uMail* instance();
+    <font color=#0000FF>static</font> Account* getActiveAccount();
+    
+    uMail(jVM* vm, string c);
+    <font color=#009900>void</font> run();
+    <font color=#009900>void</font> send(Message* message);
+    
+    <font color=#0000FF>friend</font> <font color=#0000FF>class</font> ReceiveMail;
+};
+
+<font color=#0000FF>#endif</font>
+</tt>
+</pre>
+</body>
+</html>
+<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;<p>

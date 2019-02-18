@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Java2Html 1.5
+by Lorenzo Bettini, lorenzo.bettini@penteres.it
+http://w3.newnet.it/bettini
+http://www.gnu.org/software/Java2Html/Java2Html.html">
+<title>../../decaf/native/template.h</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+<pre>
+<tt>
+<font color=#9A1900>/*
+ * Copyright (C) 2003 HawkinsSoftware
+ *
+ * This prototype of the Decaf Java development environment is free 
+ * software.  You can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software 
+ * Foundation.  However, no compilation of this code or a derivative
+ * of it may be used with or integrated into any commercial application,
+ * except by the written permisson of HawkinsSoftware.  Future versions 
+ * of this product will be sold commercially under a different license.  
+ * HawkinsSoftware retains all rights to this product, including its
+ * concepts, design and implementation.
+ *
+ * This prototype is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */</font>
+<font color=#9A1900>// &lt;[a name="start"/]&gt;
+</font>
+<font color=#9A1900>// template.h
+</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;jni.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;stdlib.h&gt;</font>
+<font color=#0000FF>#include</font> <font color=#FF0000>&lt;iostream&gt;</font>
+
+<font color=#0000FF>#ifndef</font> __template_t__
+<font color=#0000FF>#define</font> __template_t__
+
+<font color=#0000FF>using</font> <font color=#0000FF>namespace</font> ::std;
+
+
+
+<font color=#9A1900>// ****** Declaration ******* //
+</font>
+
+
+<font color=#9A1900>// &lt;[a name="uIterator"/]&gt;
+</font><font color=#9A1900>/*
+This virtual iterator has an annoying header in C++ because it is
+exported to Java as an implementation of the interface java.util.Iterator.
+It is backed by &lt;[a href="#VectorIterator"]&gt;VectorIterator&lt;[/a]&gt; below.
+The Java interface association is made in the SWIG generator file 
+&lt;[a href="uMail_i.html#uIterator"]&gt;uMail.i&lt;[/a]&gt;, such that Decaf users
+see uIterator as a standard collection type.  
+*/</font>
+<font color=#0000FF>class</font> uIterator
+{
+<font color=#0000FF>public</font>:
+    <font color=#0000FF>virtual</font> <font color=#009900>bool</font> hasNext() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> jobject next() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> <font color=#009900>void</font>* getNext() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> <font color=#009900>void</font> remove() = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>virtual</font> <font color=#009900>void</font> reset() = <font color=#CC33CC>0</font>;
+};
+
+<font color=#0000FF>template</font>&lt;<font color=#0000FF>class</font> T&gt;
+<font color=#0000FF>class</font> VectorIterator;
+
+
+<font color=#9A1900>// &lt;[a name="uVector"/]&gt;
+</font><font color=#9A1900>/*
+A simple vector template for uMail, which I used to experiment with exporting
+templated classes to Java.  The &lt;[a href="uMail_i.html#jVector"]&gt;export&lt;[/a]&gt; 
+seems to work normally, and ideally one
+would implement the java.util.Collection and java.util.List interfaces with 
+this class, such that uMail vectors appear in Java as standard collection types.
+*/</font>
+<font color=#9A1900>// uVector 
+</font><font color=#0000FF>template</font>&lt;<font color=#0000FF>class</font> T&gt; 
+<font color=#0000FF>class</font> uVector 
+{
+<font color=#0000FF>private</font>:
+    T** data;
+    <font color=#009900>void</font> ensureCapacity(<font color=#009900>int</font> index);
+    <font color=#009900>int</font> bufSize;
+
+<font color=#0000FF>protected</font>:    
+    <font color=#009900>int</font> size;
+    
+<font color=#0000FF>public</font>:
+    uVector();
+    T* get(<font color=#009900>int</font> index);
+    <font color=#009900>void</font> set(<font color=#009900>int</font> index, T* value);
+    <font color=#009900>void</font> add(T* value);
+    <font color=#009900>void</font> remove(<font color=#009900>int</font> index);
+    <font color=#009900>int</font> getSize();                   
+    VectorIterator&lt;T&gt;* iterator();
+    VectorIterator&lt;T&gt;* iterator(uIterator* originalContent);
+};
+
+
+<font color=#9A1900>// VectorIterator
+</font><font color=#0000FF>template</font>&lt;<font color=#0000FF>class</font> T&gt;
+<font color=#0000FF>class</font> VectorIterator : <font color=#0000FF>public</font> uIterator
+{
+<font color=#0000FF>private</font>:
+    uVector&lt;T&gt;* data;
+    uIterator* originalContent;
+    <font color=#009900>int</font> index;
+<font color=#0000FF>public</font>:
+    VectorIterator(uVector&lt;T&gt;* d, uIterator* o) : data(d), index(<font color=#CC33CC>0</font>), originalContent(o) {};
+    <font color=#009900>bool</font> hasNext();
+    <font color=#009900>void</font>* getNext();
+    jobject next();
+    <font color=#009900>void</font> remove();
+    <font color=#009900>void</font> reset();
+};
+
+
+
+
+<font color=#9A1900>// ****** Implementation ******* //
+</font>
+
+
+<font color=#9A1900>// uVector
+</font><font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+uVector&lt;T&gt;::uVector()
+{
+    <font color=#0000FF>this</font>-&gt;size = <font color=#CC33CC>0</font>;
+    <font color=#0000FF>this</font>-&gt;bufSize = <font color=#CC33CC>10</font>;
+    <font color=#0000FF>this</font>-&gt;data = (T**)malloc(<font color=#0000FF>sizeof</font>(T*) * <font color=#0000FF>this</font>-&gt;bufSize);
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+T* uVector&lt;T&gt;::get(<font color=#009900>int</font> index)
+{
+    <font color=#0000FF>if</font> (index &gt;= <font color=#0000FF>this</font>-&gt;size)
+    {
+        <font color=#0000FF>return</font> NULL;
+    }
+    <font color=#0000FF>return</font> <font color=#0000FF>this</font>-&gt;data[index];
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font> uVector&lt;T&gt;::add(T* value)
+{
+    ensureCapacity(<font color=#0000FF>this</font>-&gt;size);
+
+    <font color=#0000FF>this</font>-&gt;data[<font color=#0000FF>this</font>-&gt;size] = value;
+    <font color=#0000FF>this</font>-&gt;size++;
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font> uVector&lt;T&gt;::remove(<font color=#009900>int</font> index)
+{
+    <font color=#0000FF>if</font> (index &gt;= <font color=#0000FF>this</font>-&gt;size)
+    {
+        <font color=#0000FF>return</font>;
+    }
+    
+    <font color=#0000FF>for</font> (<font color=#009900>int</font> i = index; i &lt; (<font color=#0000FF>this</font>-&gt;size-<font color=#CC33CC>1</font>); i++)
+    {
+        <font color=#0000FF>this</font>-&gt;data[i] = <font color=#0000FF>this</font>-&gt;data[i+<font color=#CC33CC>1</font>];
+    }
+    <font color=#0000FF>this</font>-&gt;size--;
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>int</font> uVector&lt;T&gt;::getSize()
+{
+    <font color=#0000FF>return</font> <font color=#0000FF>this</font>-&gt;size;
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font> uVector&lt;T&gt;::set(<font color=#009900>int</font> index, T* value)
+{
+    ensureCapacity(index+<font color=#CC33CC>1</font>);
+    
+    <font color=#0000FF>this</font>-&gt;data[index] = value;
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font> uVector&lt;T&gt;::ensureCapacity(<font color=#009900>int</font> index)
+{
+    <font color=#0000FF>if</font> (index &gt;= <font color=#0000FF>this</font>-&gt;bufSize)
+    {
+        <font color=#0000FF>this</font>-&gt;bufSize += <font color=#CC33CC>10</font>;
+        T** old = <font color=#0000FF>this</font>-&gt;data;
+        <font color=#0000FF>this</font>-&gt;data = (T**)malloc(<font color=#0000FF>sizeof</font>(T*) * <font color=#0000FF>this</font>-&gt;bufSize);
+        <font color=#0000FF>for</font> (<font color=#009900>int</font> i = <font color=#CC33CC>0</font>; i &lt; <font color=#0000FF>this</font>-&gt;size; i++)
+        {
+            <font color=#0000FF>this</font>-&gt;data[i] = old[i];
+        }
+        <font color=#0000FF>delete</font>(old);
+    }
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+VectorIterator&lt;T&gt;* uVector&lt;T&gt;::iterator()
+{
+    <font color=#0000FF>return</font> (<font color=#0000FF>new</font> VectorIterator&lt;T&gt;(<font color=#0000FF>this</font>, NULL));
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+VectorIterator&lt;T&gt;* uVector&lt;T&gt;::iterator(uIterator* originalContent)
+{
+    <font color=#0000FF>return</font> (<font color=#0000FF>new</font> VectorIterator&lt;T&gt;(<font color=#0000FF>this</font>, originalContent));
+}
+
+
+<font color=#9A1900>// &lt;[a name="VectorIterator"/]&gt;
+</font><font color=#9A1900>// VectorIterator
+</font><font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>bool</font> VectorIterator&lt;T&gt;::hasNext()
+{
+    <font color=#0000FF>return</font> (<font color=#0000FF>this</font>-&gt;index &lt; <font color=#0000FF>this</font>-&gt;data-&gt;getSize());
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+jobject VectorIterator&lt;T&gt;::next()
+{
+    <font color=#0000FF>if</font> (<font color=#0000FF>this</font>-&gt;originalContent != NULL)
+    {
+        <font color=#0000FF>this</font>-&gt;originalContent-&gt;next();
+    }
+    <font color=#0000FF>return</font> (jobject)<font color=#0000FF>this</font>-&gt;data-&gt;get(<font color=#0000FF>this</font>-&gt;index++);
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font>* VectorIterator&lt;T&gt;::getNext()
+{
+    <font color=#0000FF>if</font> (<font color=#0000FF>this</font>-&gt;originalContent != NULL)
+    {
+        <font color=#0000FF>this</font>-&gt;originalContent-&gt;getNext();
+    }
+    <font color=#0000FF>return</font> <font color=#0000FF>this</font>-&gt;data-&gt;get(<font color=#0000FF>this</font>-&gt;index++);
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font> VectorIterator&lt;T&gt;::remove()
+{
+    <font color=#0000FF>if</font> (<font color=#0000FF>this</font>-&gt;originalContent != NULL)
+    {
+        <font color=#0000FF>this</font>-&gt;originalContent-&gt;remove();
+    }
+    <font color=#0000FF>this</font>-&gt;data-&gt;remove(<font color=#0000FF>this</font>-&gt;index-<font color=#CC33CC>1</font>);
+}
+
+<font color=#0000FF>template</font> &lt;<font color=#0000FF>class</font> T&gt;
+<font color=#009900>void</font> VectorIterator&lt;T&gt;::reset()
+{
+    <font color=#0000FF>this</font>-&gt;index = <font color=#CC33CC>0</font>;
+}
+
+<font color=#9A1900>/*
+// uVector for jobject
+template &lt;&gt;
+uVector&lt;_jobject&gt;::uVector()
+{
+    this-&gt;size = 0;
+    this-&gt;bufSize = 10;
+    this-&gt;data = (jobject*)malloc(sizeof(jobject) * this-&gt;bufSize);
+}
+
+template &lt;&gt;
+jobject uVector&lt;_jobject&gt;::get(int index)
+{
+    if (index &gt;= this-&gt;size)
+    {
+        return NULL;
+    }
+    return this-&gt;data[index];
+}
+
+template &lt;&gt;
+void uVector&lt;_jobject&gt;::add(jobject value)
+{
+    ensureCapacity(this-&gt;size);
+
+    cout &lt;&lt; "adding " &lt;&lt; value &lt;&lt; endl;
+    
+    value = uVector::env-&gt;NewGlobalRef(value);
+    
+    this-&gt;data[this-&gt;size] = value;
+    this-&gt;size++;
+}
+
+template &lt;&gt;
+void uVector&lt;_jobject&gt;::remove(int index)
+{
+    if (index &gt;= this-&gt;size)
+    {
+        return;
+    }
+    
+    for (int i = index; i &lt; (this-&gt;size-1); i++)
+    {
+        this-&gt;data[i] = this-&gt;data[i+1];
+    }
+    this-&gt;size--;
+}
+
+template &lt;&gt;
+int uVector&lt;_jobject&gt;::getSize()
+{
+    return this-&gt;size;
+}
+
+template &lt;&gt;
+void uVector&lt;_jobject&gt;::set(int index, jobject value)
+{
+    ensureCapacity(index+1);
+    
+    this-&gt;data[index] = value;
+}
+
+template &lt;&gt;
+void uVector&lt;_jobject&gt;::ensureCapacity(int index)
+{
+    if (index &gt;= this-&gt;bufSize)
+    {
+        this-&gt;bufSize += 10;
+        jobject* old = this-&gt;data;
+        this-&gt;data = (jobject*)malloc(sizeof(jobject) * this-&gt;bufSize);
+        for (int i = 0; i &lt; this-&gt;size; i++)
+        {
+            this-&gt;data[i] = old[i];
+        }
+        delete(old);
+    }
+}
+*/</font>
+<font color=#0000FF>#endif</font>
+</tt>
+</pre>
+</body>
+</html>

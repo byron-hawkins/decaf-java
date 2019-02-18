@@ -1,0 +1,279 @@
+<html>
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<h2>Decaf User's Guide</h2>
+This guide delineates the basic operations of the Decaf Editor.  For step-by-step instructions on writing code with Decaf,
+please see the <a href="DecafTutorial.html">tutorial</a>.  Decaf can be launched either from <a href="uMailUserGuide.html">
+uMail</a>, or by running the script DecafLaunch.bat in the <b>decaf_demo</b> directory of the prototype installation.
+<p>
+<table border="1">
+<caption><h4>Input Commands<br></h4></caption>
+<th>User Action</th>
+<th>Does This</th>
+<tr>
+	<td>ctrl--T</td>
+	<td>opens the <a href="#TypeChooser">Type Chooser</a></td>
+</tr>
+<tr>
+	<td>ctrl--B</td>
+	<td>opens the <a href="#BluesReview">Blues Review</a></td>
+</tr>
+<tr>
+	<td>ctrl--P</td>
+	<td>opens the <a href="#Percolator">Percolator</a></td>
+</tr>
+<tr>
+	<td>alt--left-click</td>
+	<td><a href="#HotPick">hot-select</a> an item (when possible at the mouse cursor location)</td>
+</tr>
+<tr>
+	<td>alt--right-click</td>
+	<td><a href="#HotPut">hot-drop</a> the hot-selected item (when possible)</td>
+</tr>
+<tr>
+	<td>right-click</td>
+	<td>pop up the <a href="#GrammarMenu">grammar menu</a> (when the mouse cursor is on a code component)</td>
+</tr>
+<tr>
+	<td>double-click (left)</td>
+	<td>on a code item: open it for editing (when possible)<br>
+	on a Type Chooser node: open a browser with technical documentation</td>
+</tr>
+<tr>
+	<td>Enter</td>
+	<td>"</td>
+</tr>
+<tr>
+	<td>Delete</td>
+	<td>delete a selection from a listbox</td>
+</tr>
+<tr>
+	<td>ctrl--up-arrow</td>
+	<td>move a list selection up (multiple discontiguous selections are allowed)</td>
+</tr>
+<tr>
+	<td>ctrl--down-arrow</td>
+	<td>move a list selection down</td>
+</tr>
+<tr>
+	<td>Open Button</td>
+	<td><a href="#Open">Open</a> a file</td>
+</tr>
+<tr>
+	<td>Save Button</td>
+	<td><a href="#Save">Save</a> the current file</td>
+</tr>
+<tr>
+	<td>Compile Button</td>
+	<td><a href="#Compile">Compile</a> the current file</td>
+</tr>
+
+</table>
+
+<p>
+<h3>The Basics</h3>
+The Decaf editor provides a point-and-click interface for the entire Java programming language (though this prototype
+is actually <a href="#NotEntirely">missing a few features</a>).  You will not be able to type in code, which may seem
+cumbersome at first, but it should quickly become second nature to build your Java program using the visual components
+of the editor.  For use with uMail, Decaf has been configured with a small
+set of common code constructs, and allows only one class at a time to be edited.  The name of the current class appears at
+the top of the <b>Class Editor</b>, and will be used as a filename upon saving (this is a Java requirement).  The package name
+will also be chosen as "com.bitwise.umail" for simplicity, though multiple packages are of course possible in Decaf.
+The remaining components are mostly self-explanatory.  Create a field, method or parameter with the attached
+<b>New</b> button.  Give it a name by keyboard, and <a href="#HotPick">hot-drop</a> a type on it from the 
+<a href="#TypeChooser">Type Chooser</a>.  Use the right mouse button to popup the <a href="#GrammarMenu">grammar menu</a>
+in the method body, and create a statement by selecting one of the items.  From here (the method body) on in, code 
+constructs are created with the grammar menu.  To reference a variable in an expression, hot-select the variable at its
+point of declaration (including local variables inside statement blocks) and hot-drop it on the expression in question.
+<p>
+<h3>Rule Enforcement</h3>
+Decaf enforces a number of constraints by disallowing the <a href="#HotPut">hot drop</a> of code components in places that 
+will guarantee an
+error.  For example, variables cannot be referenced in expression boxes that are out of their scope.  Try it: create
+an assignment statement, and below it declare a variable.  Hot-select the variable and mouse over the assignment editor.
+Notice that neither of the expression boxes will highlight; they have checked up the line and failed to find the 
+variable in their scope, and so have rejected it.  Another example is the condition of an 'if' statement, which will
+only accept boolean variables.  If you hoodwink one into taking a non-boolean expression, perhaps by inserting a method call that 
+returns another type, the 'if' statement will turn blue.  It's got the blues because it knows this non-boolean 
+expression will fail to compile.  Open the <a href="#BluesReview">Blues Review</a> with ctrl-B to see the sad statement, and click
+on it for an explanation.  If you're interested, check out the documentation for 
+<a href="api/com/bitwise/decaf/editor/grammar/EnforcementOfficer.html">EnforcementOfficer</a> to see how Java rules
+are enforced in the editor.  
+<p>
+<a name="MinimalDrift"/><h3>Minimal Drift</h3>
+Decaf implements its UI rules and features on the basis of the principle <a href="Glossary.html#MinimalDrift">minimal drift</a>, 
+which states that the usefulness of 
+an IDE can be judged by the frequency and distance the user must travel away from the task at hand to figure
+out how to make something in the editor work.  In the case of Decaf, this especially includes the rules of the Java language,
+and the details of the class library.  For example, suppose a uMail user wants to display message delivery times in the
+folder browser (see the <a href="uMailUserGuide.html">uMail User's Guide</a> for context).  Suppose also that the user sees 
+how to get the <b>sentTime</b> from a message, but does not know how to format a <a href="jdk/api/java/util/Date.html">Date</a> 
+object.  To figure this out, the user must drift away from
+the <b>Member Chooser</b> and go to the <b>Type Chooser</b> to explore the methods available on the Date object.  
+This configuration of Decaf provides the
+method <a href="api/c++/uMail_i.html#jTime">format()</a>, complete with explanation, and quickly the user is back to work 
+coding their plugin.  But have you ever tried to format a Date in Java without such a documented convenience method?  You'll 
+drift all the way to the package java.text before you can get any kind of text string out of a Date object -- and the 
+<a href="Glossary.html#JavaAPI">Java API</a> documentation won't tell you very much about it.  You'll probably have to find a chat room, 
+or a Java-savvy friend, to find out 
+how java.text applies to your message folders.  Decaf can be <a href="DecafCustomizationGuide.html">configured</a>
+to help even when convenience methods like format() have not been implemented by the application developer.  A comment attached
+to the <a href="DecafCustomizationGuide.html#TypeChooser">Type Chooser</a> node for java.util.Date can suggest to the user
+the various mechanisms available to extract formatted text strings from a Date object.  The user will in this case need to
+"drift off" into the javadoc for information about various java.util and java.text classes.  Decaf does not claim to 
+reign in the drift on all sides (certainly this prototype does not), but I hope you'll agree it offers a great deal of 
+relief to the user who is more interested in getting their plugin to work than they are in tinkering, reading and yakking.
+See the <a href="NativeIntegration.html">Native Integration</a> documentation for the corollary to <i>minimal drift</i> known 
+as <a href="Glossary.html#IntrinsicAccessibility">intrinsic accessibility</a>.  
+<p>
+<a name="NotEntirely"/><h3>...some things are missing</h3>
+While not all of the 
+language constructs are implemented in this prototype, the foundation on which they can be built has been completed.
+See the <a href="DecafCustomizationGuide.html#Return">Decaf Customization Guide</a> and the class 
+<a href="api/com/bitwise/decaf/editor/grammar/GrammarMask.html">GrammarMask</a> for instructions on 
+creating editor facilities.  In most cases
+it is not desirable to have all the language features available, because they are not always useful.  For example,
+in the context of uMail, a user would rarely miss the ability to create static methods, and their presence in the editor would only 
+increase the potential for confusion: "What is all this stuff?".  On the other hand, it would be nice if users could
+create an interface to represent a FolderMenuContent object (a folder or a message), but this feature is presently missing.
+<p>
+<hr>
+<p>
+<a name="TypeChooser"/><h3>Type Chooser</h3>
+The class library available to Decaf is listed in the Type Chooser's type tree (ctrl-T to open).  Types in the tree may
+be <a href="#HotPick">hot-selected</a>; this is the primary means of declaring the types of objects.  At the bottom of its window
+is a text display of documentation for each class, method and parameter; it shows information relevant to the currently
+selected node (if there is any).  The contents of this window are taken from the Decaf Configuration File (found at 
+decaf_demo/umail/config.xml).  Double-click a node to open the <a href="Glossary.html#JavaAPI">Java API</a> (javadoc generated) 
+<a href="jdk/api/index.html" target="outer">documentation</a> for the specified entity.  
+
+<p>
+<a name="BluesReview"/><h3>Blues Review</h3>
+The Blues Review contains a list of statements and expressions in the current file that are syntactically or otherwise incorrect 
+(ctrl-B to open).  Click on an item 
+in the list, and Decaf will consecutively open each editor from the corresponding method body down to the offending construct
+(it always jumps a bit here -- sorry).
+A box will appear in the upper-left corner of the screen explaining why this bit of code "has the blues" (click anywhere in
+this window to close it).  You'll notice that the text of the code construct itself is blue until it is happy about its place
+in the world.
+
+<p>
+<a name="Percolator"/><h3>Percolator</h3>
+Statements and expressions that are deleted or displaced in the process of editing a file are not vaporized, 
+but instead appear quietly in the Percolator (ctrl-P to open).
+Any percolating item can be returned to service by hot-dropping it back into your plugin.  The Percolator makes for a handy
+clipboard when cutting and pasting numerous items.
+Statements are grouped into fragments if deleted in multiple, and are always labeled "Fragment#" with an incrementing 
+index.  Open a fragment (by double-clicking or pressing enter) to give it a better
+name for future reference.
+
+<p>
+<a name="HotPick"/><h3>Hot Selection</h3>
+The user creates associations between editor components using the <a href="api/org/hs/jfc/HotComponent.html">HotComponent</a> interface.  
+Here's
+how it works: hot-select an item with alt--left-click.  If hot-selectable, the item will turn red (so you won't lose track of what's
+been selected).  Now mouse around the editor and see that certain components highlight with a red border as you pass by.  These are
+potential <a href="#HotPut">drop</a> locations.
+
+<p>
+<a name="HotPut"/><h3>Hot Drop</h3>
+(continued from <a href="#HotPick">Hot Selection</a>)<br>Drop a hot-selected item onto a component with alt--right-click.  The drop site
+must already be highlighted, indicating that it is willing to accept the hot-selected item; if it is not highlighted, the drop site
+is saying that it's not compatible with the hot-selected item, and nothing will happen if you try to drop there.  The rules for 
+determining what internal data object gets delivered in a hot drop can be somewhat complex, and are detailed in the 
+<a href="api/org/hs/jfc/HotComponent.html">HotComponent
+API documentation</a>.  One or both components may choose to ask for more details about your intentions before any data is
+dropped (but none will do so in the current Decaf editor).    
+
+<p>
+<a name="GrammarMenu"/><h3>Grammar Menu</h3>
+This menu can be popped up on any component that contains code constructs (right-button to pop); these begin at the method 
+body and include all sub-components of it.  Code components represent either a block of statements or a single (possibly
+compound) expression.  If popped on a statement block, the grammar menu will contain a list of grammars suitable for creating 
+statements.  Selecting one 
+will cause the associated construct to be created and inserted at the click location, and an editor opened with its (empty)
+contents.  If popped on an expression box, the grammar menu will contain expression grammars.  If the expression box is not
+empty, then the menu item selected will have to decide what to do with the present contents.  
+If they are compatible with the construct
+being created (e.g., if of the same code construct), they may be used as its initial contents.
+If not used, they will be sent to the <a href="#Percolator">Pecolator</a>.  In either case, the new expression will then be 
+inserted into the box, and an editor opened with its contents.  This <a href="DecafCustomizationGuide.html#Return">configuration</a> 
+of Decaf provides the following grammars.<p>
+<b>Statement Grammars</b>
+<p>
+<dl>
+<dt>Declare a Variable
+<dd>A local variable declaration
+<dt>Condition Section
+<dd>An if/then/else statement
+<dt>Loop While
+<dd>A while loop, or a do/while loop
+<dt>Assignment and Arithmetic
+<dd>An assignment statement, a string concatenation (using the <b>+</b> operator), or a mathematical expression using numbers.
+<dt>Class Member
+<dd>Used to reference a field or call a method on an object
+<dt>Report to Command Line
+<dd>Prints a text string to the command line
+</dl>
+<b>Expression Grammars</b>
+<dl>
+<dt>Condition Section
+<dd>An if/then/else expression
+<dt>Assignment and Arithmetic
+<dd>An assignment statement, a string concatenation (using the <b>+</b> operator), or a mathematical expression using numbers.
+<dt>Comparison
+<dd>A comparison between two expressions of compatible types
+<dt>Class Member
+<dd>Used to reference a field or call a method on an object
+<dt>Constant Value
+<dd>A constant value such as a string or number, typed directly into the box
+<dt>Clear
+<dd>Clears the box on which the grammar menu was popped up
+</dl>
+
+</dir>
+<p>
+<a name="Open"/><h3>Open Button</h3>
+Use this button to find and open a file.  
+
+<p>
+<a name="Save"/><h3>Save Button</h3>
+This button saves the current file in a binary .cup format, which includes the current contents of the <a href="#BluesReview">Blues
+Review</a> and the <a href="#Percolator">Percolator</a>.  It does not also compile the current file, so you'll have to use the compile button 
+specifically, if that's what you have in mind.
+
+<p>
+<a name="Compile"/><h3>Compile Button</h3>
+This button prints a .java file containing all the code in the current plugin, and compiles that file in a separate process using 
+decaf_demo/bin/jikes (the popular <a href="http://oss.software.ibm.com/developerworks/opensource/jikes/">Jikes</a>, from IBM).  
+Originally, the foundation package <a href="Glossary.html#KJC">at.dms.kjc</a> was responsible for directly
+compiling the Decaf code constructs (without printing .java first), but due to some small bugs in its vast sea of code,
+I've abandoned KJC for the time being (I currently use it only for printing Decaf constructs to .java code).   The compile button 
+does not also save the current file, so you'll have to use the save button specifically, if that's what you have in mind.
+
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+</body>

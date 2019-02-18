@@ -1,0 +1,36 @@
+# Project: jMail
+# Makefile created by Dev-C++ 4.9.7.4
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = jMail.o ../decaf/com/bitwise/umail/uMail_wrap.o $(RES)
+LINKOBJ  = jMail.o ../decaf/com/bitwise/umail/uMail_wrap.o $(RES)
+LIBS =  -L"C:/DEV/C++/DEV-CPP/lib" -L"C:/dev/decaf_demo/decaf/native" --add-stdcall-alias "C:/dev/decaf_demo/umail/account.o" "C:/dev/decaf_demo/umail/ui.o" "C:/dev/decaf_demo/umail/util.o" "C:/dev/decaf_demo/decaf/native/plugin.o" "C:/dev/decaf_demo/umail/umail.o"  "C:/dev/decaf_demo/decaf/native/template.o"
+INCS =  -I"C:/DEV/C++/DEV-CPP/include"  -I"./"  -I"C:/dev/java/jdk/include"  -I"C:/dev/java/jdk/include/win32"  -I"C:/dev/decaf_demo/decaf/native"  -I"C:/dev/decaf_demo/decaf/native" 
+CXXINCS =  -I"C:/DEV/C++/DEV-CPP/include"  -I"C:/dev/c++/Dev-Cpp/include/c++"  -I"C:/dev/c++/Dev-Cpp/include/c++/mingw32"  -I"C:/dev/java/jdk/include"  -I"C:/dev/java/jdk/include/win32"  -I"C:/dev/decaf_demo/decaf/native"  -I"."  -I"C:/dev/decaf_demo/decaf/native" 
+BIN  = jMail.dll
+CXXFLAGS = $(CXXINCS) 
+CFLAGS = $(INCS) 
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before jMail.dll all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+DLLWRAP=dllwrap.exe
+DEFFILE=libjMail.def
+STATICLIB=libjMail.a
+
+$(BIN): $(LINKOBJ)
+	$(DLLWRAP) --output-def $(DEFFILE) --driver-name c++ --implib $(STATICLIB) $(LINKOBJ) $(LIBS) -o $(BIN)
+
+jMail.o: jMail.cpp
+	$(CPP) -c jMail.cpp -o jMail.o $(CXXFLAGS)
+
+../decaf/com/bitwise/umail/uMail_wrap.o: ../decaf/com/bitwise/umail/uMail_wrap.cxx
+	$(CPP) -c ../decaf/com/bitwise/umail/uMail_wrap.cxx -o ../decaf/com/bitwise/umail/uMail_wrap.o $(CXXFLAGS)
