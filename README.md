@@ -7,7 +7,7 @@ Prototype implementation of a drag-and-drop source code editor for Java.
 
 #### == Status ==
 
-This is an archive of an entrepreneurial venture that ended in 2004. Our goal was to license DecafJava to software vendors who needed a generic plugin editor suitable for less technically experienced users. The dependency on a JVM and the clumsy JNI interface became significant obstacles, despite our efforts to provide a usable JNI layer. Successful products typically needed only a small interpreter compiled for the native platform that could be easily installed with the vendor's product, or even integrated directly.
+This repository contains an archive of an entrepreneurial venture that ended in 2004. Our goal was to license DecafJava to software vendors who needed a generic plugin editor suitable for less technically experienced users. The dependency on a JVM and the clumsy JNI interface became significant obstacles, despite our efforts to provide a usable JNI layer. Successful products typically needed only a small interpreter compiled for the native platform that could be easily installed with the vendor's product, or even integrated directly.
 
 **Running DecafJava** may be difficult on current platforms because it was built on Windows XP in 2003, and relies on several awkward layers to interface with native executables written in C/C++. However, all the source code is available in the repository, and all of the third party libraries are still supported by the original developer or organization, so it should be possible to construct a working version on your favorite PC or VM. 
 
